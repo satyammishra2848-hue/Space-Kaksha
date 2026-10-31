@@ -120,9 +120,12 @@ export default function HomePage() {
                 </div>
 
                 {/* Live handwritten note rendered in Caveat hand font with lively responsive spring */}
-                <div className="absolute bottom-4 left-2 sm:left-4 lg:-left-4 bg-surface px-3.5 py-1.5 rounded-lg border-2 border-ink shadow-[3px_3px_0_var(--ink)] group-hover:shadow-[5px_5px_0_var(--ink)] group-hover:-translate-y-1.5 group-hover:rotate-0 text-xs sm:text-sm font-hand text-ink flex items-center gap-1.5 -rotate-2 select-none transition-all duration-200">
-                  <span className="text-yellow group-hover:rotate-45 group-hover:scale-125 transition-transform inline-block">✦</span>
-                  <span className="font-bold">Same Sky. Bigger Dreams.</span>
+                <div
+                  className="absolute bottom-4 left-2 sm:left-4 lg:-left-4 px-3.5 py-1.5 rounded-lg border-2 border-[#171715] shadow-[3px_3px_0_#171715] group-hover:shadow-[5px_5px_0_#171715] group-hover:-translate-y-1.5 group-hover:rotate-0 text-xs sm:text-sm font-hand flex items-center gap-1.5 -rotate-2 select-none transition-all duration-200"
+                  style={{ backgroundColor: '#FFFEFA', color: '#171715' }}
+                >
+                  <span className="text-[#C86800] group-hover:rotate-45 group-hover:scale-125 transition-transform inline-block">✦</span>
+                  <span className="font-bold text-[#171715]">Same Sky. Bigger Dreams.</span>
                 </div>
               </div>
             </div>

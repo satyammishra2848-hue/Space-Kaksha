@@ -55,6 +55,11 @@ h1, h2, h3, h4, .font-display {
   font-family: var(--font-display), "Space Grotesk", "Arial Rounded MT Bold", sans-serif;
   letter-spacing: -0.02em;
   text-wrap: balance;
+  outline: none !important;
+}
+
+h1:focus, h2:focus, h3:focus {
+  outline: none !important;
 }
 
 .font-hand {

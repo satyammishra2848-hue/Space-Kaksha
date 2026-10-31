@@ -55,4 +55,5 @@ export const MotionProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 };
 
 export const useReducedMotion = () => useContext(MotionContext);
+export const useMotion = useReducedMotion;
 

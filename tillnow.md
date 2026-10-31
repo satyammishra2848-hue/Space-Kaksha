@@ -110,6 +110,12 @@ Space Kaksha/
 ---
 
 ### Change Log
+- **2026-11-01 (Clean Architecture & 3D Stage Overhaul):**
+  - **Language Toggle Visibility:** Guaranteed `#FFFFFF` pure white text on `#171715` active capsule pill with explicit styles and shadow, fixing invisible EN/Hindi label bug.
+  - **AI Space Tutor Redesign:** Eradicated walls of text and "AI slop" from the lesson dashboard; replaced with friendly bot greeting bubble, 3 targeted 1-click curiosity prompts, and crisp 2-sentence authoritative answers with "+5 XP" rewards.
+  - **Photorealistic 3D Moon Stage:** Removed ugly horizontal range slider; implemented authentic 3D textured Moon (`moon_exact_clean.png`) and Earth (`earth_real_3d.png`), tactile milestone phase buttons (`🌑`, `🌓`, `🌕`, `🌗`), continuous orbit revolution, drag-to-revolve physics, dynamic terminator illumination, and interactive crater zoom explorer (Apollo 11, Tycho, Copernicus).
+  - **Enterprise Codebase Architecture:** Modularized lesson dashboard into `LessonSidebar.tsx`, `LessonNavBar.tsx`, and `LessonQuiz.tsx`; established public API barrel index files across all component domains (`src/components/index.ts`, `ui`, `layout`, `motion`, `space`, `learning`, `tutor`, `context`, `content`, `data`).
+  - **Verification:** 100% passing TypeScript (`tsc --noEmit`), 0 ESLint warnings, all 16 static routes prerendered cleanly, tested with headless browser screenshots.
 - **2026-10-31 (Interactive Scroll, Button Visibility & Celestial Hover Fixes):**
   - Resolved transparent/invisible "Start test" button by locking explicit `#171715` ink background and `#F7F4ED` crisp text with hard shadows.
   - Implemented smooth in-page scrolling (`scrollIntoView({ behavior: 'smooth' })`) across all navbar and footer anchors (How it works, Levels, Explore, About).

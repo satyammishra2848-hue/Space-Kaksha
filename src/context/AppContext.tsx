@@ -10,6 +10,7 @@ interface AppContextType {
   locale: Locale;
   setLocale: (loc: Locale) => void;
   t: (key: TranslationKey) => string;
+  addXp: (amount: number) => void;
   completeLesson: (lessonId: string, xpReward: number, badgeId?: string) => boolean;
   passLevelCheck: (levelId: string, xpReward: number) => boolean;
   setUserLevel: (levelId: string) => void;
@@ -50,6 +51,10 @@ export function AppContextProvider({ children }: { children: React.ReactNode }) 
   const t = (key: TranslationKey): string => {
     const dict = translations[user.activeLocale] || translations.en;
     return dict[key] || translations.en[key] || String(key);
+  };
+
+  const addXp = (amount: number) => {
+    setUser((prev) => ({ ...prev, xp: prev.xp + amount }));
   };
 
   // Rule: Award XP and unlocks ONCE only. Never farmable on refresh.
@@ -121,6 +126,7 @@ export function AppContextProvider({ children }: { children: React.ReactNode }) 
         locale: user.activeLocale,
         setLocale,
         t,
+        addXp,
         completeLesson,
         passLevelCheck,
         setUserLevel,
@@ -133,6 +139,8 @@ export function AppContextProvider({ children }: { children: React.ReactNode }) 
     </AppContext.Provider>
   );
 }
+
+export const AppProvider = AppContextProvider;
 
 export function useApp() {
   const context = useContext(AppContext);

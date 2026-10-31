@@ -1,115 +1,131 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
+import { TransitionLink } from '@/components/motion/TransitionLink';
 
 interface SpaceTutorPanelProps {
   className?: string;
   contextLesson?: string;
 }
 
-const CANNED_ANSWERS: Record<string, string> = {
-  'Why does the Moon shine?':
-    'The Moon shines because its pale rocky surface acts like a giant mirror, reflecting sunlight back towards Earth! It has no fire or nuclear fusion of its own.',
-  'Phases of the Moon':
-    'As the Moon orbits Earth every ~29.5 days, the angle between Earth, Moon, and Sun changes. We see different portions of the sunlit half—from New Moon to Full Moon!',
-  'How far is the Moon?':
-    'The Moon is about 384,400 km away from Earth on average. That is roughly 30 Earth diameters away! Light from the Moon takes about 1.3 seconds to reach your eyes.',
-};
+interface QuickPrompt {
+  q: string;
+  a: string;
+  icon: string;
+}
+
+const LESSON_PROMPTS: QuickPrompt[] = [
+  {
+    q: 'Why does the Moon shine?',
+    a: 'The Moon has no light of its own! It acts as a giant cosmic mirror, reflecting sunlight back towards our eyes on Earth.',
+    icon: '✨',
+  },
+  {
+    q: 'What causes the phases?',
+    a: 'As the Moon revolves around Earth every 27.3 days, the angle between Sun, Earth, and Moon shifts, changing how much of the lit side we see.',
+    icon: '🌓',
+  },
+  {
+    q: 'How far is the Moon?',
+    a: '384,400 km away! You could fit all 7 other planets in our solar system side-by-side in that distance, with room to spare.',
+    icon: '🚀',
+  },
+];
 
 export const SpaceTutorPanel: React.FC<SpaceTutorPanelProps> = ({
   className = '',
   contextLesson = 'Meet the Moon',
 }) => {
-  const [activeReply, setActiveReply] = useState<string | null>(null);
-  const [selectedChip, setSelectedChip] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const handleChipClick = (question: string) => {
-    setSelectedChip(question);
-    setIsLoading(true);
-    setActiveReply(null);
-
-    setTimeout(() => {
-      setIsLoading(false);
-      setActiveReply(CANNED_ANSWERS[question] || 'Great space question! Orbiting knowledge...');
-    }, 400);
-  };
+  const [selectedPrompt, setSelectedPrompt] = useState<QuickPrompt | null>(null);
 
   return (
-    <div className={`bg-surface rounded-2xl border border-line p-5 shadow-2xs space-y-4 ${className}`}>
-      {/* Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-line">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full bg-lavender/30 border border-lavender/40 flex items-center justify-center text-base">
-            🤖
+    <div
+      className={`bg-surface p-4 rounded-xl border-[1.5px] border-ink shadow-[3px_3px_0_var(--ink)] flex flex-col justify-between ${className}`}
+    >
+      <div>
+        {/* Header */}
+        <div className="flex items-center justify-between pb-3 border-b border-line mb-3">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full border border-ink bg-paper-warm flex items-center justify-center text-sm shadow-[1px_1px_0_var(--ink)]">
+              🤖
+            </div>
+            <div>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-ink">
+                AI Space Tutor
+              </h3>
+              <p className="text-[10px] text-ink-muted">
+                Context: {contextLesson}
+              </p>
+            </div>
           </div>
-          <div>
-            <h4 className="text-xs font-bold text-ink uppercase tracking-wider">AI Space Tutor</h4>
-            <span className="text-[10px] text-ink-muted">Context: {contextLesson}</span>
-          </div>
-        </div>
-
-        <Link
-          href="/tutor"
-          className="text-xs text-ink-muted hover:text-ink p-1 rounded hover:bg-paper"
-          title="Open Full Tutor Dashboard"
-        >
-          ⤢
-        </Link>
-      </div>
-
-      {/* Main Message Bubble */}
-      <div className="space-y-3">
-        <div className="p-3.5 rounded-xl bg-paper-warm/60 border border-line/60 text-xs text-ink leading-relaxed">
-          The Moon is Earth&apos;s closest neighbour! 🌙 It doesn&apos;t have its own light, it reflects sunlight from the Sun. Want to know why we see different shapes of the Moon?
-        </div>
-
-        {/* Selected answer reply */}
-        {isLoading && (
-          <div className="p-3 rounded-xl bg-lavender/15 border border-lavender/30 text-xs text-ink-muted flex items-center gap-2">
-            <span className="animate-spin text-lavender">✦</span>
-            <span>Tutor thinking...</span>
-          </div>
-        )}
-
-        {activeReply && (
-          <div className="p-3.5 rounded-xl bg-lavender/20 border border-lavender/40 text-xs text-ink space-y-1">
-            <span className="font-bold text-ink block">🤖 Answer:</span>
-            <p className="leading-relaxed">{activeReply}</p>
-          </div>
-        )}
-      </div>
-
-      {/* Suggested question chips */}
-      <div className="space-y-1.5 pt-1">
-        {Object.keys(CANNED_ANSWERS).map((q) => (
-          <button
-            key={q}
-            type="button"
-            onClick={() => handleChipClick(q)}
-            className={`w-full flex items-center justify-between p-2.5 rounded-xl border text-left text-xs font-semibold transition-all ${
-              selectedChip === q
-                ? 'border-orange bg-orange/10 text-ink shadow-2xs'
-                : 'border-line bg-surface hover:border-ink hover:bg-paper-warm/40 text-ink'
-            }`}
+          <TransitionLink
+            href="/tutor"
+            className="text-xs text-ink-muted hover:text-ink p-1 rounded hover:bg-paper-warm transition-colors"
+            title="Open Full Tutor"
           >
-            <span>{q}</span>
-            <span className="text-orange text-xs font-bold">➔</span>
-          </button>
-        ))}
+            ↗
+          </TransitionLink>
+        </div>
+
+        {/* Clean Speech Bubble: No walls of text or AI slop */}
+        {!selectedPrompt ? (
+          <div className="bg-paper-warm/60 p-3 rounded-lg border border-line text-xs text-ink leading-relaxed mb-3">
+            <span className="font-semibold">The Moon is Earth&apos;s closest companion! 🌙</span> It doesn&apos;t create light; it bounces sunlight. Tap a question below to unlock the secrets!
+          </div>
+        ) : (
+          <div className="bg-[#171715] text-[#F7F4ED] p-3 rounded-lg border border-ink shadow-xs mb-3 transition-all animate-fadeIn">
+            <div className="flex items-center justify-between mb-1.5 pb-1 border-b border-[#333]">
+              <span className="text-[11px] font-bold text-orange flex items-center gap-1">
+                <span>{selectedPrompt.icon}</span>
+                <span>{selectedPrompt.q}</span>
+              </span>
+              <button
+                type="button"
+                onClick={() => setSelectedPrompt(null)}
+                className="text-[10px] text-paper-warm hover:text-white px-1"
+                title="Close answer"
+              >
+                ✕
+              </button>
+            </div>
+            <p className="text-xs text-[#E6E1D5] leading-relaxed">
+              {selectedPrompt.a}
+            </p>
+          </div>
+        )}
+
+        {/* Quick Question Pills */}
+        <div className="space-y-1.5">
+          {LESSON_PROMPTS.map((item) => (
+            <button
+              key={item.q}
+              type="button"
+              onClick={() => setSelectedPrompt(item)}
+              className={`w-full text-left px-3 py-2 rounded-lg border text-xs font-semibold transition-all flex items-center justify-between group cursor-pointer ${
+                selectedPrompt?.q === item.q
+                  ? 'border-ink bg-paper-warm font-bold text-ink shadow-[1px_1px_0_var(--ink)]'
+                  : 'border-line bg-surface hover:border-ink hover:bg-paper-warm/50 text-ink'
+              }`}
+            >
+              <span className="truncate pr-2">{item.q}</span>
+              <span className="text-ink-muted group-hover:text-ink group-hover:translate-x-0.5 transition-transform text-[10px]">
+                →
+              </span>
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div className="pt-2 border-t border-line text-center">
-        <Link
+      {/* Link to Full Tutor */}
+      <div className="pt-3 border-t border-line mt-3 text-center">
+        <TransitionLink
           href="/tutor"
-          className="text-[11px] font-bold text-orange hover:underline inline-flex items-center gap-1"
+          className="text-[11px] font-bold text-ink hover:text-orange transition-colors inline-flex items-center gap-1"
         >
           <span>Ask anything in full tutor</span>
-          <span>➔</span>
-        </Link>
+          <span>→</span>
+        </TransitionLink>
       </div>
     </div>
   );
 };
-

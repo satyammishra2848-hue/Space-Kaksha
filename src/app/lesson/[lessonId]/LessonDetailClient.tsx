@@ -2,404 +2,130 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
-import { AppShell } from '@/components/layout/AppShell';
-import { PrimaryButton } from '@/components/ui/PrimaryButton';
-import { SecondaryButton } from '@/components/ui/SecondaryButton';
+import { TransitionLink } from '@/components/motion/TransitionLink';
 import { MoonSimulator } from '@/components/space/MoonSimulator';
-import { LessonVideo } from '@/components/learning/LessonVideo';
 import { SpaceTutorPanel } from '@/components/tutor/SpaceTutorPanel';
+import { LessonQuiz } from '@/components/learning/LessonQuiz';
+import { LessonSidebar } from '@/components/learning/LessonSidebar';
+import { LessonNavBar } from '@/components/learning/LessonNavBar';
 import { LessonCompleteModal } from '@/components/ui/LessonCompleteModal';
 import { useApp } from '@/context/AppContext';
-import { LEVEL_1_LESSONS } from '@/content/levels';
 
-export function LessonDetailClient({ lessonId }: { lessonId: string }) {
-  const { user, completeLesson, isLessonCompleted } = useApp();
+interface LessonDetailClientProps {
+  lessonId: string;
+}
 
-  const lesson = LEVEL_1_LESSONS.find((l) => l.id === lessonId) || LEVEL_1_LESSONS[1]; // default to Meet the Moon
-  const [activeTab, setActiveTab] = useState<'explore' | 'learn' | 'facts'>('explore');
-  const [isModalOpen, setIsModalOpen] = useState(false);
+export const LessonDetailClient: React.FC<LessonDetailClientProps> = ({
+  lessonId,
+}) => {
+  const { addXp, completeLesson } = useApp();
+  const [showCompleteModal, setShowCompleteModal] = useState(false);
 
-  // Quick Mini-Quiz state
-  const [quizIndex, setQuizIndex] = useState(0);
-  const [selectedQuizOption, setSelectedQuizOption] = useState<string | null>(null);
-  const [quizScore, setQuizScore] = useState(0);
-  const [quizSubmitted, setQuizSubmitted] = useState(false);
-
-  const currentQuizQ = lesson.quiz[quizIndex] || lesson.quiz[0];
-
-  const handleQuizAnswer = (optionId: string) => {
-    if (quizSubmitted) return;
-    setSelectedQuizOption(optionId);
-  };
-
-  const handleNextQuizQuestion = () => {
-    if (!selectedQuizOption) return;
-    const isCorrect = currentQuizQ.options.find((o) => o.id === selectedQuizOption)?.isCorrect;
-    if (isCorrect) setQuizScore((prev) => prev + 1);
-
-    if (quizIndex < lesson.quiz.length - 1) {
-      setQuizIndex((prev) => prev + 1);
-      setSelectedQuizOption(null);
-    } else {
-      setQuizSubmitted(true);
-    }
-  };
-
-  const handleCompleteLessonAction = () => {
-    completeLesson(lesson.id, lesson.xpReward, 'moon-explorer');
-    setIsModalOpen(true);
+  const handleLessonComplete = () => {
+    completeLesson(lessonId, 50);
+    addXp(50);
+    setShowCompleteModal(true);
   };
 
   return (
-    <AppShell navbarVariant="logged-in">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
-          {/* 1. LEFT SIDEBAR */}
-          <aside className="lg:col-span-3 space-y-6">
-            
-            {/* Level Card */}
-            <div className="bg-surface rounded-2xl border border-line p-4 shadow-2xs">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="relative w-10 h-10 rounded-full overflow-hidden border border-line shrink-0">
-                  <Image src="/assets/illustrations/planet_level1_explorer.png" alt="Level 1" fill className="object-contain" />
-                </div>
-                <div>
-                  <h3 className="text-xs font-bold text-ink uppercase">Level 1 · Explorer</h3>
-                  <span className="text-[11px] text-ink-muted">
-                    {user.completedLessonIds.length} / 4 lessons completed
-                  </span>
-                </div>
-              </div>
-
-              {/* Lesson Step List */}
-              <div className="space-y-1.5 pt-2 border-t border-line">
-                {LEVEL_1_LESSONS.map((lsn) => {
-                  const isActive = lsn.id === lesson.id;
-                  const isDone = isLessonCompleted(lsn.id);
-
-                  return (
-                    <Link
-                      key={lsn.id}
-                      href={`/lesson/${lsn.id}`}
-                      className={`flex items-center justify-between p-2.5 rounded-xl text-xs font-semibold transition-all ${
-                        isActive
-                          ? 'bg-orange/15 border border-orange text-ink font-bold shadow-xs'
-                          : 'hover:bg-paper-warm/60 text-ink-muted border border-transparent'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
-                          isActive ? 'bg-orange text-ink' : 'bg-surface-muted text-ink-muted'
-                        }`}>
-                          {lsn.order}
-                        </span>
-                        <span className={isActive ? 'text-ink font-bold' : ''}>{lsn.title}</span>
-                      </div>
-                      {isDone ? (
-                        <span className="text-success font-bold text-xs">✓</span>
-                      ) : isActive ? (
-                        <span className="text-orange text-xs font-bold">▶</span>
-                      ) : (
-                        <span className="text-ink-muted text-xs">🔒</span>
-                      )}
-                    </Link>
-                  );
-                })}
-
-                {/* Level Check Step */}
-                <Link
-                  href="/check/level-1"
-                  className="flex items-center justify-between p-2.5 rounded-xl text-xs font-semibold text-ink-muted hover:bg-paper-warm/60 transition-all border border-transparent"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <span className="w-5 h-5 rounded-full bg-surface-muted text-ink-muted flex items-center justify-center text-[10px] font-bold">
-                      4
-                    </span>
-                    <span>Level Check</span>
-                  </div>
-                  <span className="text-ink-muted text-xs">🏁</span>
-                </Link>
-              </div>
+    <div className="max-w-[1520px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* 1. TOP BREADCRUMB & HEADER SECTION */}
+      <div className="relative mb-6 pb-4 border-b border-line">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
+          {/* Header Copy */}
+          <div className="lg:col-span-8">
+            {/* Breadcrumb */}
+            <div className="flex items-center gap-2 text-xs font-semibold text-ink-muted mb-2">
+              <TransitionLink href="/path" className="hover:text-ink transition-colors">
+                My Path
+              </TransitionLink>
+              <span>›</span>
+              <TransitionLink href="/path" className="hover:text-ink transition-colors">
+                Level 1
+              </TransitionLink>
+              <span>›</span>
+              <span className="text-ink font-bold">Meet the Moon</span>
             </div>
 
-            {/* Next Up Card */}
-            <div className="bg-surface rounded-2xl border border-line p-4 shadow-2xs space-y-2">
-              <span className="text-[10px] font-bold text-ink-muted uppercase tracking-wider block">
-                Next Up
+            {/* Handwritten Label */}
+            <div className="font-hand text-2xl text-orange font-bold -rotate-1 select-none">
+              Lesson 2
+            </div>
+
+            {/* Main Heading */}
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-ink uppercase tracking-tight font-display mt-0.5">
+              MEET THE MOON
+            </h1>
+
+            {/* Objective Subtitle */}
+            <p className="text-sm sm:text-base text-ink-soft mt-1 max-w-xl">
+              Let&apos;s explore Earth&apos;s closest neighbour.
+            </p>
+
+            {/* Lesson Badges */}
+            <div className="flex flex-wrap items-center gap-2 mt-3">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-line bg-surface text-xs font-semibold text-ink shadow-2xs">
+                <span>📹</span>
+                <span>Video</span>
               </span>
-              <div className="flex items-center gap-3">
-                <div className="relative w-9 h-9 rounded-full overflow-hidden border border-line shrink-0 bg-night">
-                  <Image src="/assets/illustrations/planet_level2_cadet.png" alt="Planets" fill className="object-contain" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-ink">Discover Planets</h4>
-                  <span className="text-[10px] text-ink-muted">Lesson 3</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Doodle */}
-            <div className="p-4 text-center">
-              <span className="font-hand text-lg text-ink-muted block transform -rotate-2">
-                Same Sky. Bigger Dreams.
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border-2 border-ink bg-paper-warm text-xs font-bold text-ink shadow-xs">
+                <span>🎮</span>
+                <span>Interactive</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-line bg-surface text-xs font-semibold text-ink shadow-2xs">
+                <span>📝</span>
+                <span>Quiz</span>
+              </span>
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full border border-line bg-surface text-xs text-ink-muted">
+                <span>⏱</span>
+                <span>~ 10 mins</span>
               </span>
             </div>
+          </div>
 
-          </aside>
-
-          {/* 2. CENTER MAIN LESSON CONTAINER */}
-          <main className="lg:col-span-6 space-y-6">
-            
-            {/* Breadcrumb & Header */}
-            <div>
-              <nav aria-label="Breadcrumb" className="text-xs text-ink-muted mb-2">
-                <Link href="/path" className="hover:text-ink">My Path</Link> &gt;{' '}
-                <span>Level 1</span> &gt;{' '}
-                <span className="text-ink font-semibold">{lesson.title}</span>
-              </nav>
-
-              <div className="flex flex-col sm:flex-row sm:items-baseline gap-2">
-                <span className="font-hand text-xl text-orange">Lesson {lesson.order}</span>
-                <h1 className="text-2xl sm:text-3xl font-bold uppercase tracking-tight text-ink">
-                  {lesson.title}
-                </h1>
-              </div>
-
-              <p className="text-xs sm:text-sm text-ink-soft mt-1">
-                {lesson.subtitle}
-              </p>
-
-              {/* Tags */}
-              <div className="flex flex-wrap items-center gap-2 pt-3 text-xs text-ink-muted">
-                <span className="px-2.5 py-1 rounded-full bg-surface border border-line flex items-center gap-1">
-                  ▶ Video
-                </span>
-                <span className="px-2.5 py-1 rounded-full bg-surface border border-line flex items-center gap-1">
-                  🎮 Interactive
-                </span>
-                <span className="px-2.5 py-1 rounded-full bg-surface border border-line flex items-center gap-1">
-                  🎯 Quiz
-                </span>
-                <span className="px-2.5 py-1 rounded-full bg-surface border border-line flex items-center gap-1">
-                  ⏱ ~ {lesson.estimatedMinutes} mins
-                </span>
-              </div>
+          {/* Top-Right Decorative Cosmic Art Banner (Matching Reference Design) */}
+          <div className="lg:col-span-4 hidden lg:flex justify-end items-end">
+            <div className="relative w-72 h-32 rounded-xl overflow-hidden border border-line bg-[#0E1320] shadow-sm">
+              <Image
+                src="/assets/illustrations/ref_top_astro.png"
+                alt="Astronaut boy on the Moon looking at Earth"
+                fill
+                className="object-cover"
+              />
             </div>
-
-            {/* Tabs: Explore | Learn | Key Facts */}
-            <div className="flex items-center gap-2 border-b border-line pb-3">
-              <button
-                type="button"
-                onClick={() => setActiveTab('explore')}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
-                  activeTab === 'explore'
-                    ? 'bg-orange text-ink shadow-xs'
-                    : 'bg-surface border border-line text-ink-muted hover:text-ink'
-                }`}
-              >
-                ✦ Explore
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab('learn')}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
-                  activeTab === 'learn'
-                    ? 'bg-ink text-surface shadow-xs'
-                    : 'bg-surface border border-line text-ink-muted hover:text-ink'
-                }`}
-              >
-                Learn
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab('facts')}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
-                  activeTab === 'facts'
-                    ? 'bg-ink text-surface shadow-xs'
-                    : 'bg-surface border border-line text-ink-muted hover:text-ink'
-                }`}
-              >
-                Key Facts
-              </button>
-            </div>
-
-            {/* Tab 1: Explore (WORKING MOON SIMULATOR) */}
-            {activeTab === 'explore' && (
-              <div className="space-y-4">
-                <MoonSimulator />
-                <p className="text-xs text-ink-muted leading-relaxed">
-                  Interact with the simulator above to observe how the Moon revolves around Earth. Notice how the lit side always faces the Sun, while observers on Earth witness varying crescent, quarter, and full phases!
-                </p>
-              </div>
-            )}
-
-            {/* Tab 2: Learn (Story & Video Component) */}
-            {activeTab === 'learn' && (
-              <div className="space-y-4">
-                <LessonVideo title={lesson.title} />
-                <div className="bg-surface p-5 rounded-2xl border border-line space-y-3">
-                  <h3 className="text-sm font-bold text-ink uppercase">Lesson Mission Brief</h3>
-                  <p className="text-xs text-ink leading-relaxed">
-                    {lesson.description}
-                  </p>
-                  <div className="pt-2">
-                    <span className="text-xs font-bold text-ink block mb-2">Objectives:</span>
-                    <ul className="text-xs text-ink-soft space-y-1.5 list-disc list-inside">
-                      {lesson.objectives.map((obj, i) => (
-                        <li key={i}>{obj}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Tab 3: Key Facts */}
-            {activeTab === 'facts' && (
-              <div className="bg-surface p-6 rounded-2xl border border-line space-y-4">
-                <h3 className="text-sm font-bold text-ink uppercase">Key Planetary Facts</h3>
-                <div className="space-y-2.5">
-                  {lesson.keyFacts.map((fact, idx) => (
-                    <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-paper-warm/50 border border-line/60">
-                      <span className="text-orange text-sm font-bold mt-0.5">✦</span>
-                      <p className="text-xs text-ink font-medium leading-relaxed">{fact}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Bottom Actions: Previous & Complete Lesson */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-line">
-              <SecondaryButton href="/path" size="sm">
-                ← Previous Lesson
-              </SecondaryButton>
-
-              <div className="flex items-center gap-1.5">
-                <span className="w-6 h-6 rounded-full bg-success text-surface text-xs font-bold flex items-center justify-center">✓</span>
-                <span className="w-6 h-6 rounded-full bg-orange text-ink text-xs font-bold flex items-center justify-center">2</span>
-                <span className="w-6 h-6 rounded-full bg-surface-muted text-ink-muted text-xs font-bold flex items-center justify-center">3</span>
-                <span className="w-6 h-6 rounded-full bg-surface-muted text-ink-muted text-xs font-bold flex items-center justify-center">🔒</span>
-              </div>
-
-              <PrimaryButton onClick={handleCompleteLessonAction} size="md" variant="orange">
-                Complete Lesson →
-              </PrimaryButton>
-            </div>
-
-          </main>
-
-          {/* 3. RIGHT SIDEBAR (AI Space Tutor & Quick Quiz) */}
-          <aside className="lg:col-span-3 space-y-6">
-            
-            {/* Embedded AI Space Tutor Panel */}
-            <SpaceTutorPanel contextLesson={lesson.title} />
-
-            {/* Quick Mini-Quiz Panel */}
-            <div className="bg-surface rounded-2xl border border-line p-5 shadow-2xs space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-line">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm">🎯</span>
-                  <h4 className="text-xs font-bold text-ink uppercase tracking-wider">Quick Quiz</h4>
-                </div>
-                <span className="text-xs font-mono font-bold text-ink-muted">
-                  {quizIndex + 1} / {lesson.quiz.length}
-                </span>
-              </div>
-
-              {!quizSubmitted ? (
-                <div className="space-y-4">
-                  <p className="text-xs font-bold text-ink leading-snug">
-                    {currentQuizQ.question}
-                  </p>
-
-                  <div className="space-y-2">
-                    {currentQuizQ.options.map((opt) => {
-                      const isSelected = selectedQuizOption === opt.id;
-                      return (
-                        <button
-                          key={opt.id}
-                          type="button"
-                          onClick={() => handleQuizAnswer(opt.id)}
-                          className={`w-full flex items-center gap-2.5 p-2.5 rounded-xl border text-left text-xs font-medium transition-all ${
-                            isSelected
-                              ? 'border-orange bg-orange/10 font-semibold'
-                              : 'border-line hover:border-ink hover:bg-paper-warm/40'
-                          }`}
-                        >
-                          <span className={`w-4 h-4 rounded-full border flex items-center justify-center text-[10px] shrink-0 ${
-                            isSelected ? 'border-orange bg-orange text-surface' : 'border-line'
-                          }`}>
-                            {isSelected ? '✓' : ''}
-                          </span>
-                          <span>{opt.text}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  <div className="pt-2 flex items-center justify-between">
-                    <button
-                      type="button"
-                      onClick={() => setQuizIndex((prev) => Math.min(lesson.quiz.length - 1, prev + 1))}
-                      className="text-xs text-ink-muted hover:text-ink underline"
-                    >
-                      Skip
-                    </button>
-                    <PrimaryButton
-                      onClick={handleNextQuizQuestion}
-                      disabled={!selectedQuizOption}
-                      size="sm"
-                      variant="ink"
-                    >
-                      {quizIndex === lesson.quiz.length - 1 ? 'Check Answer' : 'Next Question →'}
-                    </PrimaryButton>
-                  </div>
-                </div>
-              ) : (
-                <div className="text-center py-4 space-y-3">
-                  <div className="w-10 h-10 rounded-full bg-mint/30 text-success text-xl flex items-center justify-center mx-auto">
-                    ✓
-                  </div>
-                  <h5 className="text-xs font-bold text-ink uppercase">Quiz Completed!</h5>
-                  <p className="text-xs text-ink-muted">
-                    You scored {quizScore} out of {lesson.quiz.length} on this check!
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setQuizSubmitted(false);
-                      setQuizIndex(0);
-                      setSelectedQuizOption(null);
-                      setQuizScore(0);
-                    }}
-                    className="text-xs text-orange font-bold hover:underline"
-                  >
-                    ↺ Try Quiz Again
-                  </button>
-                </div>
-              )}
-            </div>
-
-          </aside>
-
+          </div>
         </div>
-
       </div>
 
-      {/* Lesson Complete Modal */}
+      {/* 2. MAIN 3-COLUMN DASHBOARD GRID (MATCHING REFERENCE DESIGN) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Left Column: Level Navigation & Next Up (3 cols) */}
+        <div className="lg:col-span-3 xl:col-span-3">
+          <LessonSidebar />
+        </div>
+
+        {/* Center Column: Big Interactive 3D Moon Stage & Bottom Action Bar (6 cols) */}
+        <div className="lg:col-span-6 xl:col-span-6 space-y-4">
+          <MoonSimulator />
+          <LessonNavBar onComplete={handleLessonComplete} />
+        </div>
+
+        {/* Right Column: AI Space Tutor & Quick Quiz (3 cols) */}
+        <div className="lg:col-span-3 xl:col-span-3 space-y-4">
+          <SpaceTutorPanel contextLesson="Meet the Moon" />
+          <LessonQuiz />
+        </div>
+      </div>
+
+      {/* 3. LESSON COMPLETE MODAL */}
       <LessonCompleteModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        lessonTitle={lesson.title}
-        xpEarned={lesson.xpReward}
+        isOpen={showCompleteModal}
+        onClose={() => setShowCompleteModal(false)}
+        xpEarned={50}
+        lessonTitle="Meet the Moon"
         nextLessonHref="/lesson/discover-planets"
         nextLessonTitle="Discover Planets"
       />
-    </AppShell>
+    </div>
   );
-}
-
+};

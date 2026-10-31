@@ -8,6 +8,8 @@ import { useTransitionContext } from '@/context/TransitionContext';
 export interface TransitionLinkProps extends LinkProps {
   children: React.ReactNode;
   className?: string;
+  id?: string;
+  style?: React.CSSProperties;
   onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
   target?: string;
   download?: string | boolean;
