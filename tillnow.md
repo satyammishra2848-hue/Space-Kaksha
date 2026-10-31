@@ -110,6 +110,8 @@ Space Kaksha/
 ---
 
 ### Change Log
+- **2026-11-01 (Hydration Warning Fix):**
+  - Added `suppressHydrationWarning` to `<html>` and `<body>` in `src/app/layout.tsx` to prevent browser extensions (e.g. `cz-shortcut-listen`) from triggering Next.js dev overlay hydration warnings.
 - **2026-11-01 (Clean Architecture & 3D Stage Overhaul):**
   - **Language Toggle Visibility:** Guaranteed `#FFFFFF` pure white text on `#171715` active capsule pill with explicit styles and shadow, fixing invisible EN/Hindi label bug.
   - **AI Space Tutor Redesign:** Eradicated walls of text and "AI slop" from the lesson dashboard; replaced with friendly bot greeting bubble, 3 targeted 1-click curiosity prompts, and crisp 2-sentence authoritative answers with "+5 XP" rewards.

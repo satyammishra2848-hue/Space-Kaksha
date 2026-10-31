@@ -40,8 +40,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} ${caveat.variable} h-full`}>
-      <body className="min-h-full flex flex-col bg-paper text-ink font-body antialiased overflow-x-clip">
+    <html lang="en" suppressHydrationWarning className={`${spaceGrotesk.variable} ${inter.variable} ${caveat.variable} h-full`}>
+      <body suppressHydrationWarning className="min-h-full flex flex-col bg-paper text-ink font-body antialiased overflow-x-clip">
         <MotionProvider>
           <TransitionProvider>
             <AppContextProvider>
