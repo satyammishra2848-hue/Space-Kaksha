@@ -1,64 +1,102 @@
 :root {
+  /* Surfaces */
   --paper: #F7F4ED;
   --paper-warm: #F0EBE1;
   --surface: #FFFEFA;
   --surface-muted: #EDE8DE;
 
+  /* Typography & Lines */
   --ink: #171715;
   --ink-soft: #35342F;
-  --ink-muted: #6F6B63;
-  --ink-faint: #9B968C;
+  --ink-muted: #5C5850;
+  --ink-faint: #787368;
   --line: #D9D2C6;
-  --line-strong: #24231F;
+  --line-strong: #171715;
 
-  --orange: #F2A23A;
+  /* Accents */
+  --orange: #C86800; /* Accessible high-contrast orange text */
+  --orange-bg: #F2A23A; /* Authentic CTA fill */
   --orange-soft: #F9D7A1;
   --yellow: #F3C95E;
   --lavender: #B8A2E8;
   --dusty-blue: #8DB8D7;
-  --mint: #9BC8A9;
+  --mint: #2E7D47;
   --coral: #E58D7A;
 
-  --success: #397A50;
+  --success: #2E693F;
   --success-soft: #DDEBDD;
   --warning: #A86A20;
   --error: #B44D43;
 
+  /* Night Palette */
   --night: #171B25;
   --night-soft: #232936;
   --night-line: #454A55;
 
-  --shadow-card: 0 8px 24px rgba(23,23,21,.06);
-  --shadow-hover: 0 12px 28px rgba(23,23,21,.10);
-  --shadow-popover: 0 16px 40px rgba(23,23,21,.14);
+  /* Bug 1: Night Theme Scope Tokens (High Contrast) */
+  --on-night: #F7F4ED;
+  --on-night-soft: #E6E1D5;
+  --on-night-muted: #B8B2A6;
+  --on-night-faint: #8A857B;
+  --on-night-orange: #F9B24E;
+  --on-night-yellow: #F3C95E;
+  --on-night-line: #3D4454;
 
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
+  /* Component Language v2: Ink Hard Shadows */
+  --shadow-ink-sm: 2px 2px 0 var(--ink);
+  --shadow-ink: 3px 3px 0 var(--ink);
+  --shadow-ink-hover: 5px 5px 0 var(--ink);
+  --shadow-ink-night: 3px 3px 0 #000000;
+
+  /* Editorial Borders & Radii (max 12px for cards, pills only for chips) */
+  --border-ink: 1.5px solid var(--ink);
+  --border-ink-strong: 2px solid var(--ink);
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
   --radius-pill: 999px;
 
-  --space-1: .25rem;
-  --space-2: .5rem;
-  --space-3: .75rem;
-  --space-4: 1rem;
-  --space-5: 1.25rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
-  --space-10: 2.5rem;
-  --space-12: 3rem;
-  --space-16: 4rem;
-  --space-20: 5rem;
-  --space-24: 6rem;
+  /* 8px Spacing Rhythm */
+  --space-1: 0.5rem;   /* 8px */
+  --space-2: 1rem;     /* 16px */
+  --space-3: 1.5rem;   /* 24px */
+  --space-4: 2rem;     /* 32px */
+  --space-5: 2.5rem;   /* 40px */
+  --space-6: 3rem;     /* 48px */
+  --space-8: 4rem;     /* 64px */
+  --space-10: 5rem;    /* 80px */
+  --space-12: 6rem;    /* 96px */
+
+  /* Motion System Tokens (Part 4) */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --dur-press: 90ms;
+  --dur-hover: 160ms;
+  --dur-ui: 260ms;
+  --dur-reveal: 420ms;
+  --dur-hero: 700ms;
 }
 
+/* Reduced Motion Mode Override */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    animation-duration: .01ms !important;
+    animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
-    transition-duration: .01ms !important;
+    transition-duration: 0.01ms !important;
   }
+}
+
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  scroll-behavior: auto !important;
+  transition-duration: 0.01ms !important;
+  transform: none !important;
 }

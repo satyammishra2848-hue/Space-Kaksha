@@ -177,3 +177,4 @@ export const LessonCompleteModal: React.FC<LessonCompleteModalProps> = ({
     </div>
   );
 };
+

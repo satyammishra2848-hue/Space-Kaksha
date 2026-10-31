@@ -170,3 +170,4 @@ with open(MANIFEST_PATH, "w", encoding="utf-8") as f:
     json.dump(manifest, f, indent=2)
 
 print(f"\nManifest successfully written to {MANIFEST_PATH} with {len(manifest)} assets.")
+

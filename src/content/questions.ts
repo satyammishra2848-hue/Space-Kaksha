@@ -252,3 +252,4 @@ export const LEVEL_1_CHECK_QUESTIONS: QuizQuestion[] = [
     explanation: 'Earth\'s gravitational force pulls the Moon continually toward Earth, keeping it in stable orbit.',
   },
 ];
+

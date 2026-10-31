@@ -45,3 +45,4 @@ export const LanguageToggle: React.FC<LanguageToggleProps> = ({ className = '' }
     </div>
   );
 };
+

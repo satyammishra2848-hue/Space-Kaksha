@@ -56,3 +56,4 @@ export const sampleBadges = [
     unlocked: false,
   },
 ];
+

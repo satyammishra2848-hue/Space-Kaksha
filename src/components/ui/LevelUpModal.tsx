@@ -153,3 +153,4 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
     </div>
   );
 };
+

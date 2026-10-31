@@ -42,3 +42,4 @@ export const StreakChip: React.FC<StreakChipProps> = ({ days, className = '' }) 
     </div>
   );
 };
+

@@ -152,3 +152,4 @@ export interface QuizQuestion {
 - [x] Working Placement Test with score calculation mapping to starting level.
 - [x] Zero console runtime errors, lint errors, or broken builds.
 - [x] Mobile responsive down to 360px without horizontal overflow.
+

@@ -39,3 +39,4 @@ export const LessonVideo: React.FC<LessonVideoProps> = ({
     </div>
   );
 };
+
