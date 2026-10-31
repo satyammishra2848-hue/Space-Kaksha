@@ -6,11 +6,13 @@ import { TransitionLink } from '@/components/motion/TransitionLink';
 interface LessonNavBarProps {
   onComplete: () => void;
   prevHref?: string;
+  currentOrder?: number;
 }
 
 export const LessonNavBar: React.FC<LessonNavBarProps> = ({
   onComplete,
-  prevHref = '/lesson/earth-and-sky',
+  prevHref = '/path',
+  currentOrder = 2,
 }) => {
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-xl bg-surface border-[1.5px] border-ink shadow-[3px_3px_0_var(--ink)] mt-6">
@@ -25,30 +27,39 @@ export const LessonNavBar: React.FC<LessonNavBarProps> = ({
 
       {/* Step Dots Indicators */}
       <div className="flex items-center gap-2 select-none" aria-label="Lesson progress steps">
-        <span
-          className="w-7 h-7 rounded-full border border-mint bg-mint/15 text-mint flex items-center justify-center text-xs font-bold"
-          title="Lesson 1: Completed"
-        >
-          ✓
-        </span>
-        <span
-          className="w-7 h-7 rounded-full border-2 border-ink bg-[#F2A23A] text-[#171715] flex items-center justify-center text-xs font-black shadow-[1.5px_1.5px_0_var(--ink)]"
-          title="Lesson 2: Current"
-        >
-          2
-        </span>
-        <span
-          className="w-7 h-7 rounded-full border border-line bg-paper-warm text-ink-muted flex items-center justify-center text-xs font-semibold"
-          title="Lesson 3: Locked"
-        >
-          3
-        </span>
-        <span
-          className="w-7 h-7 rounded-full border border-line bg-paper-warm text-ink-faint flex items-center justify-center text-xs"
-          title="Lesson 4: Level Check"
-        >
-          🔒
-        </span>
+        {[1, 2, 3, 4].map((step) => {
+          if (step < currentOrder) {
+            return (
+              <span
+                key={step}
+                className="w-7 h-7 rounded-full border border-mint bg-mint/15 text-mint flex items-center justify-center text-xs font-bold"
+                title={`Lesson ${step}: Completed`}
+              >
+                ✓
+              </span>
+            );
+          }
+          if (step === currentOrder) {
+            return (
+              <span
+                key={step}
+                className="w-7 h-7 rounded-full border-2 border-ink bg-[#F2A23A] text-[#171715] flex items-center justify-center text-xs font-black shadow-[1.5px_1.5px_0_var(--ink)]"
+                title={`Lesson ${step}: Current`}
+              >
+                {step}
+              </span>
+            );
+          }
+          return (
+            <span
+              key={step}
+              className="w-7 h-7 rounded-full border border-line bg-paper-warm text-ink-muted flex items-center justify-center text-xs font-semibold"
+              title={`Lesson ${step}: Locked`}
+            >
+              {step === 4 ? '🔒' : step}
+            </span>
+          );
+        })}
       </div>
 
       {/* Complete Lesson CTA */}

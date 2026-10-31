@@ -1,12 +1,10 @@
 import React from 'react';
 import { LessonDetailClient } from './LessonDetailClient';
+import { LEVEL_1_LESSONS, LEVEL_2_LESSONS } from '@/content/levels';
 
 export function generateStaticParams() {
-  return [
-    { lessonId: 'earth-and-sky' },
-    { lessonId: 'meet-the-moon' },
-    { lessonId: 'discover-planets' },
-  ];
+  const all = [...LEVEL_1_LESSONS, ...LEVEL_2_LESSONS];
+  return all.map((l) => ({ lessonId: l.id }));
 }
 
 export default async function LessonDetailPage({

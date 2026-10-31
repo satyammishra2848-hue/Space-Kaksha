@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AppShell } from '@/components/layout/AppShell';
 import { useApp } from '@/context/AppContext';
+import { askTutor } from '@/lib/tutorClient';
 
 interface ChatMessage {
   id: string;
@@ -13,6 +14,8 @@ interface ChatMessage {
   time: string;
   diagramUrl?: string;
   bullets?: string[];
+  isOffline?: boolean;
+  isStreaming?: boolean;
 }
 
 const INITIAL_MESSAGES: ChatMessage[] = [
@@ -37,85 +40,29 @@ const INITIAL_MESSAGES: ChatMessage[] = [
   },
 ];
 
-const TUTOR_KNOWLEDGE_BASE: Record<string, { text: string; bullets?: string[] }> = {
-  'why does the moon shine?': {
-    text: 'The Moon shines purely by reflection! Sunlight travels 150 million km to strike the Moon\'s rocky surface, which bounces a fraction of that light back to Earth.',
-    bullets: [
-      'The Moon has an albedo (reflectivity) of about 0.12—similar to worn asphalt.',
-      'Even though it looks bright against the night sky, it is quite dark compared to fresh snow.',
-    ],
-  },
-  'how long is a lunar day?': {
-    text: 'One full day-night cycle on the Moon lasts about 29.5 Earth days! That means roughly two weeks of continuous daylight followed by two weeks of continuous night.',
-    bullets: [
-      'Daytime surface temperatures can reach +120°C (+250°F).',
-      'Nighttime drops down to a freezing -130°C (-200°F).',
-    ],
-  },
-  'show a 3d simulation': {
-    text: 'You can interact with our real-time 3D Moon Phase simulator right in Lesson 2 ("Meet the Moon")! You can rotate orbital angles and view the Earth-Moon system live.',
-    bullets: [
-      'Visit /lesson/meet-the-moon to drag the orbit slider.',
-      'Observe synchronous tidal locking directly.',
-    ],
-  },
-  'why is the sky black in space?': {
-    text: 'On Earth, atmospheric molecules scatter blue sunlight in all directions (Rayleigh scattering), making our sky look blue. Space is an extreme vacuum with no dense atmosphere to scatter light, so the sky remains inky black even with the Sun shining brightly!',
-    bullets: [
-      'Stars do not twinkle in space because there is no turbulent air.',
-      'Shadows in space are very sharp and dark.',
-    ],
-  },
-  'how do rockets work?': {
-    text: 'Rockets operate on Sir Isaac Newton\'s Third Law of Motion: "For every action, there is an equal and opposite reaction." By burning propellant and ejecting high-pressure exhaust gas downward at hypersonic speeds, the rocket accelerates upward into orbit!',
-    bullets: [
-      'Rockets carry their own oxidizer so engines burn in the airless vacuum.',
-      'Reaching low Earth orbit requires traveling at about 7.8 km per second.',
-    ],
-  },
-  'what is a black hole?': {
-    text: 'A black hole is a region in spacetime where gravity is so intense that nothing—not even light—can escape its event horizon. They typically form when massive stars collapse at the end of their lifecycles.',
-    bullets: [
-      'The boundary beyond which escape is impossible is called the Event Horizon.',
-      'Supermassive black holes reside at the hearts of most large galaxies, including our Milky Way.',
-    ],
-  },
-  'compare earth, mars and moon': {
-    text: 'Earth is our water-rich sanctuary with a protective atmosphere. Mars is a cold desert planet with a thin CO2 atmosphere and frozen polar caps. The Moon is Earth\'s rocky natural satellite with virtually no atmosphere at all!',
-  },
-};
-
-export const getTutorReply = async (query: string): Promise<{ text: string; bullets?: string[] }> => {
-  // Simulate natural brief latency (400ms)
-  await new Promise((r) => setTimeout(r, 400));
-  const clean = query.trim().toLowerCase();
-
-  for (const [key, val] of Object.entries(TUTOR_KNOWLEDGE_BASE)) {
-    if (clean.includes(key) || key.includes(clean)) {
-      return val;
-    }
-  }
-
-  return {
-    text: `That is an excellent space query! The cosmos is filled with wonderful phenomena. In our upcoming lessons, we explore this in deeper detail. Would you like to check our lesson simulator or explore the solar system?`,
-    bullets: [
-      'Tip: Try asking "Why is the sky black in space?" or "How do rockets work?"',
-      'Or check out Lesson 2: Meet the Moon for hands-on orbit exploration.',
-    ],
-  };
-};
-
 export default function SpaceTutorPage() {
-  const { user } = useApp();
+  const { user, locale } = useApp();
   const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [simulateError, setSimulateError] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const streamIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (streamIntervalRef.current) clearInterval(streamIntervalRef.current);
+    };
+  }, []);
 
   const handleSendMessage = async (textToSend?: string) => {
     const text = textToSend || inputValue;
     if (!text.trim() || isLoading) return;
+
+    if (streamIntervalRef.current) {
+      clearInterval(streamIntervalRef.current);
+      streamIntervalRef.current = null;
+    }
 
     const userMsg: ChatMessage = {
       id: `user-${Date.now()}`,
@@ -124,7 +71,8 @@ export default function SpaceTutorPage() {
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
 
-    setMessages((prev) => [...prev, userMsg]);
+    const updatedMessages = [...messages, userMsg];
+    setMessages(updatedMessages);
     if (!textToSend) setInputValue('');
     setIsLoading(true);
     setHasError(false);
@@ -138,19 +86,56 @@ export default function SpaceTutorPage() {
     }
 
     try {
-      const reply = await getTutorReply(text);
+      const response = await askTutor({
+        messages: updatedMessages.map((m) => ({
+          role: m.sender === 'user' ? 'user' : 'assistant',
+          content: m.text,
+        })),
+        level: user.currentLevelId,
+        language: locale,
+      });
+
+      const tutorMsgId = `tutor-${Date.now()}`;
+      const words = response.text.split(' ');
+      let currentWordIndex = 0;
+
       const tutorMsg: ChatMessage = {
-        id: `tutor-${Date.now()}`,
+        id: tutorMsgId,
         sender: 'tutor',
-        text: reply.text,
+        text: words[0] || '',
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        bullets: reply.bullets,
+        isOffline: response.offline,
+        isStreaming: true,
       };
+
       setMessages((prev) => [...prev, tutorMsg]);
-    } catch {
-      setHasError(true);
-    } finally {
       setIsLoading(false);
+
+      streamIntervalRef.current = setInterval(() => {
+        currentWordIndex += 1;
+        if (currentWordIndex >= words.length) {
+          if (streamIntervalRef.current) {
+            clearInterval(streamIntervalRef.current);
+            streamIntervalRef.current = null;
+          }
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === tutorMsgId ? { ...m, text: response.text, isStreaming: false } : m
+            )
+          );
+        } else {
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === tutorMsgId
+                ? { ...m, text: words.slice(0, currentWordIndex + 1).join(' ') }
+                : m
+            )
+          );
+        }
+      }, 35);
+    } catch {
+      setIsLoading(false);
+      setHasError(true);
     }
   };
 
@@ -240,7 +225,7 @@ export default function SpaceTutorPage() {
                   <span>✦</span>
                   <span>AI SPACE TUTOR</span>
                 </div>
-                <h1 className="text-xl sm:text-2xl font-bold uppercase tracking-tight text-ink">
+                <h1 className="text-xl sm:text-2xl font-bold uppercase tracking-tight text-ink font-display">
                   ASK. LEARN. <span className="text-orange">EXPLORE.</span>
                 </h1>
                 <p className="text-xs text-ink-muted">
@@ -271,6 +256,11 @@ export default function SpaceTutorPage() {
                     <span className="font-bold">{msg.sender === 'user' ? user.name : 'AI Space Tutor'}</span>
                     <span>·</span>
                     <span>{msg.time}</span>
+                    {msg.isOffline && (
+                      <span className="text-[9px] bg-paper-warm text-ink-muted px-1.5 py-0.5 rounded border border-line">
+                        Offline answer
+                      </span>
+                    )}
                   </div>
 
                   <div
@@ -280,7 +270,10 @@ export default function SpaceTutorPage() {
                         : 'bg-surface border border-line shadow-2xs text-ink'
                     }`}
                   >
-                    <p>{msg.text}</p>
+                    <p>
+                      {msg.text}
+                      {msg.isStreaming && <span className="inline-block w-1.5 h-3 bg-orange ml-1 animate-pulse" />}
+                    </p>
 
                     {/* Optional diagram */}
                     {msg.diagramUrl && (
@@ -322,7 +315,7 @@ export default function SpaceTutorPage() {
                   <button
                     type="button"
                     onClick={handleRetry}
-                    className="px-3 py-1 rounded-full bg-ink text-surface font-semibold hover:bg-ink-soft transition-colors"
+                    className="px-3 py-1 rounded-full bg-ink text-surface font-semibold hover:bg-ink-soft transition-colors cursor-pointer"
                   >
                     ↺ Retry Transmission
                   </button>
@@ -335,28 +328,28 @@ export default function SpaceTutorPage() {
               <button
                 type="button"
                 onClick={() => handleSendMessage('Why does the Moon shine?')}
-                className="px-3 py-1.5 rounded-full border border-line bg-surface hover:border-orange hover:bg-orange/5 text-ink shrink-0 font-medium transition-all"
+                className="px-3 py-1.5 rounded-full border border-line bg-surface hover:border-orange hover:bg-orange/5 text-ink shrink-0 font-medium transition-all cursor-pointer"
               >
                 Why does the Moon shine? ➔
               </button>
               <button
                 type="button"
                 onClick={() => handleSendMessage('How long is a lunar day?')}
-                className="px-3 py-1.5 rounded-full border border-line bg-surface hover:border-orange hover:bg-orange/5 text-ink shrink-0 font-medium transition-all"
+                className="px-3 py-1.5 rounded-full border border-line bg-surface hover:border-orange hover:bg-orange/5 text-ink shrink-0 font-medium transition-all cursor-pointer"
               >
                 How long is a lunar day? ➔
               </button>
               <button
                 type="button"
                 onClick={() => handleSendMessage('Why is the sky black in space?')}
-                className="px-3 py-1.5 rounded-full border border-line bg-surface hover:border-orange hover:bg-orange/5 text-ink shrink-0 font-medium transition-all"
+                className="px-3 py-1.5 rounded-full border border-line bg-surface hover:border-orange hover:bg-orange/5 text-ink shrink-0 font-medium transition-all cursor-pointer"
               >
                 Why is the sky black in space? ➔
               </button>
               <button
                 type="button"
                 onClick={() => handleSendMessage('How do rockets work?')}
-                className="px-3 py-1.5 rounded-full border border-line bg-surface hover:border-orange hover:bg-orange/5 text-ink shrink-0 font-medium transition-all"
+                className="px-3 py-1.5 rounded-full border border-line bg-surface hover:border-orange hover:bg-orange/5 text-ink shrink-0 font-medium transition-all cursor-pointer"
               >
                 How do rockets work? ➔
               </button>
@@ -382,7 +375,7 @@ export default function SpaceTutorPage() {
               <button
                 type="submit"
                 disabled={!inputValue.trim() || isLoading}
-                className="w-8 h-8 rounded-full bg-ink text-surface flex items-center justify-center text-xs font-bold hover:bg-ink-soft disabled:opacity-40 transition-colors"
+                className="w-8 h-8 rounded-full bg-ink text-surface flex items-center justify-center text-xs font-bold hover:bg-ink-soft disabled:opacity-40 transition-colors cursor-pointer"
                 aria-label="Send message"
               >
                 ➔
@@ -396,80 +389,64 @@ export default function SpaceTutorPage() {
             
             {/* Example Questions List */}
             <div className="bg-surface rounded-2xl border border-line p-4 space-y-3">
-              <h4 className="text-xs font-bold text-ink uppercase tracking-wider flex items-center gap-1.5">
+              <h4 className="text-xs font-bold text-ink uppercase tracking-wider flex items-center gap-1.5 font-display">
                 <span>📖</span>
-                <span>Example Questions</span>
+                <span>Curated Topics</span>
               </h4>
-
-              <div className="space-y-1.5">
-                {[
-                  'Why is the sky black in space?',
-                  'How do rockets work?',
-                  'What is a black hole?',
-                  'Compare Earth, Mars and Moon',
-                ].map((q) => (
-                  <button
-                    key={q}
-                    type="button"
-                    onClick={() => handleSendMessage(q)}
-                    className="w-full flex items-center justify-between p-2 rounded-xl border border-line/60 hover:border-orange hover:bg-orange/5 text-left text-xs font-medium text-ink transition-all"
-                  >
-                    <span>{q}</span>
-                    <span className="text-orange text-xs">➔</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Learning Suggestions */}
-            <div className="bg-surface rounded-2xl border border-line p-4 space-y-3">
-              <h4 className="text-xs font-bold text-ink uppercase tracking-wider flex items-center gap-1.5">
-                <span>🎯</span>
-                <span>Learning Suggestions</span>
-              </h4>
-
               <div className="space-y-2">
-                <Link
-                  href="/lesson/meet-the-moon"
-                  className="flex items-center justify-between p-2.5 rounded-xl border border-line bg-paper-warm/40 hover:border-ink transition-all"
+                <button
+                  type="button"
+                  onClick={() => handleSendMessage('What is a black hole?')}
+                  className="w-full text-left p-2.5 rounded-xl border border-line hover:border-ink hover:bg-paper-warm/50 transition-all text-xs cursor-pointer group"
                 >
-                  <div>
-                    <h5 className="text-xs font-bold text-ink">Moon & Earth</h5>
-                    <span className="text-[10px] text-ink-muted">Interactive simulation</span>
+                  <div className="font-semibold text-ink group-hover:text-orange flex items-center justify-between">
+                    <span>What is a black hole?</span>
+                    <span>→</span>
                   </div>
-                  <span className="text-orange">▶</span>
-                </Link>
+                  <p className="text-[11px] text-ink-muted mt-0.5">Gravity traps light inside</p>
+                </button>
 
-                <Link
-                  href="/lesson/meet-the-moon"
-                  className="flex items-center justify-between p-2.5 rounded-xl border border-line bg-paper-warm/40 hover:border-ink transition-all"
+                <button
+                  type="button"
+                  onClick={() => handleSendMessage('Why is the sky black in space?')}
+                  className="w-full text-left p-2.5 rounded-xl border border-line hover:border-ink hover:bg-paper-warm/50 transition-all text-xs cursor-pointer group"
                 >
-                  <div>
-                    <h5 className="text-xs font-bold text-ink">Phases of the Moon</h5>
-                    <span className="text-[10px] text-ink-muted">3D Lunar Orbit</span>
+                  <div className="font-semibold text-ink group-hover:text-orange flex items-center justify-between">
+                    <span>Why is space black?</span>
+                    <span>→</span>
                   </div>
-                  <span className="text-orange">🎮</span>
-                </Link>
+                  <p className="text-[11px] text-ink-muted mt-0.5">No air molecules to scatter light</p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleSendMessage('How do rockets work?')}
+                  className="w-full text-left p-2.5 rounded-xl border border-line hover:border-ink hover:bg-paper-warm/50 transition-all text-xs cursor-pointer group"
+                >
+                  <div className="font-semibold text-ink group-hover:text-orange flex items-center justify-between">
+                    <span>How do rockets work?</span>
+                    <span>→</span>
+                  </div>
+                  <p className="text-[11px] text-ink-muted mt-0.5">Newton&apos;s third law in vacuum</p>
+                </button>
               </div>
             </div>
 
-            {/* Did You Know? */}
-            <div className="bg-paper-warm/60 rounded-2xl border border-line p-4 space-y-2">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-ink">
-                <span className="text-orange">💡</span>
-                <span>Did You Know?</span>
-              </div>
-              <p className="text-xs text-ink-soft leading-relaxed">
-                The Moon is moving away from Earth at about 3.8 cm every year, as tidal interactions transfer angular momentum!
+            {/* Quick Context Card */}
+            <div className="bg-paper-warm/50 rounded-2xl border border-line p-4 space-y-2 text-xs">
+              <h4 className="font-bold text-ink flex items-center gap-1.5 uppercase font-display text-[11px] tracking-wider">
+                <span>🛰️</span>
+                <span>About Your Tutor</span>
+              </h4>
+              <p className="text-ink-soft leading-relaxed text-[11px]">
+                Kaksha Space Tutor combines real-time astrophysics knowledge with kind, conversational guidance. Ask any question in English or Hindi!
               </p>
             </div>
 
           </aside>
 
         </div>
-
       </div>
     </AppShell>
   );
 }
-

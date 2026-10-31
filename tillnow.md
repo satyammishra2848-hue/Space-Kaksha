@@ -94,22 +94,40 @@ Space Kaksha/
     - `/test`: 12 questions with real answers, radio semantics, keyboard support, segmented progress, and dynamic placement scoring.
     - `/result`: Level 1 Explorer assignment, topic breakdown, "What this means", Path preview, and CTAs.
     - `/path`: Interactive connected orbital trail, completed/active/locked nodes, Up Next card, and Level 2 preview.
-    - `/lesson/[lessonId]`: Interactive Moon-phase simulator (rotation, phase calculation, presets, reset), LessonVideo component, 3-question mini-quiz, and SpaceTutorPanel.
+    - `/lesson/[lessonId]`: Interactive ink-drawn dual-panel SVG Moon simulator (mathematical phase disk, orbit view with Sun and Earth, Day slider, presets, "Watch a Month" cycle), LessonVideo, 3-question quiz, SpaceTutorPanel, and locked lesson screen for `/lesson/discover-planets`.
     - `/check/[levelId]`: 8 questions with scientific diagrams, countdown timer, clickable question navigator, and Level Up trigger.
     - `/profile`: Complete learner dashboard with Aarav's sample telemetry, streak calendar, topic bars, monthly learning stats, achievements, and activity feed.
-    - `/tutor`: Dedicated AI Space Tutor dashboard with deterministic `getTutorReply()`, quick chips, and simulated error/retry handling.
+    - `/tutor`: Dedicated AI Space Tutor dashboard powered by live Gemini 3.8 Flash (`/api/tutor`), word-by-word reveal, offline fallback badge, quick chips, and simulated error/retry handling.
   - Phase E States: `LessonCompleteModal` and `LevelUpModal` with focus trapping, Esc key dismissal, and reduced-motion compliance.
-  - Phase G Verification: `npm run lint` passing with 0 errors and 0 warnings; `npm run build` passing with 16/16 static pages generated; all routes verified over HTTP returning status 200 OK.
+  - Phase G Verification: `npm run lint` passing with 0 errors and 0 warnings; `npm run build` passing with 20/20 static pages generated; Playwright smoke tests verifying all 8 routes and locked screen; phase captures at 1440px and 390px.
 - **In progress:**
-  - Demo readiness and documentation handoff.
+  - Demo ready.
 - **Next steps:**
-  - Optional: Plug in real database persistence (e.g. Supabase or SQLite) when user accounts are introduced.
-  - Optional: Integrate live Gemini API streaming keys on the server for dynamic open-domain tutor conversations.
+  - Optional: Plug in real database persistence (e.g. Supabase or SQLite) when multi-user accounts are introduced.
   - Optional: Add additional orbital simulations (e.g., gravity playground, solar system scale).
 
 ---
 
 ### Change Log
+- **2026-11-01 (SVG Moon Simulator & Gemini AI Space Tutor):**
+  - **Clean Ink-Drawn SVG Moon Simulator:** Rebuilt `MoonSimulator.tsx` using authentic dual-panel ink SVG:
+    - *Left Panel (Orbit View):* Top-down celestial view (labelled "not to scale") with Sun on the left (`Sunlight →`), Earth at the centre with hand-drawn continents, and circular dashed orbit. The Moon orbits counterclockwise with the half facing the Sun always illuminated.
+    - *Right Panel (View From Earth):* Large Moon disc showing exact mathematical phase ($t = (\text{day}/29.53) \times 360^\circ$, lit fraction = $(1 - \cos t)/2$, elliptical terminator $rx = R |\cos t|$ with northern hemisphere orientation and crater hatch markings).
+    - *Controls & Readout:* Keyboard-accessible Day slider (0 to 29.5), 4 presets (`🌑 New Moon`, `🌓 First Qtr`, `🌕 Full Moon`, `🌗 Last Qtr`) with 600ms cubic ease-out, Play/Pause "Watch a Month" (~10s continuous cycle, auto-pause on hidden tab), and Reset button. Live `aria-live="polite"` status readout reporting phase name, lit percent, day number, and 1-sentence scientific explanation.
+    - *Tabs & Art Cleanliness:* Replaced all raster art inside simulator with SVG. Added Explore, Learn (3 core concepts), and Key Facts tabs. Cleaned header illustration using textless crop `lesson_header_clean_astro.png` and live Caveat typography.
+  - **Dynamic Lesson Routing & Locked Screen:**
+    - Routed dynamic `lessonId` params across all Level 1 & 2 lessons.
+    - Added clean locked state for `/lesson/discover-planets` with "← Back to My Path" link and previous lesson navigation.
+  - **Gemini AI Space Tutor Integration:**
+    - Server route `src/app/api/tutor/route.ts` using Gemini REST API (`gemini-3.8-flash` / `GEMINI_MODEL`) with 12s `AbortController` timeout, in-memory IP rate limiter (12 req/min), origin/host check, and child-safe system prompt.
+    - Fallback knowledge base `src/lib/tutorFallback.ts` providing polite, scientifically accurate bilingual (EN/HI) answers when offline or if API key is unset.
+    - Client integration `src/lib/tutorClient.ts`: `SpaceTutorPanel` and `/tutor` feature visible text input and Send buttons, typing indicators, word-by-word reveal (35-40ms), subtle "Offline answer" badge, and interactive suggested question chips.
+  - **Automated Verification & Playwright Tests:**
+    - `scripts/smoke.mjs`: All 8 routes (`/`, `/test`, `/result`, `/path`, `/lesson/meet-the-moon`, `/check/level-1`, `/profile`, `/tutor`) verified returning HTTP 200 with 0 console errors, plus locked lesson verification.
+    - `scripts/test_tutor_phases.mjs`: Verified 3 tutor conditions (configured, Hindi fallback, empty/unexpected query) and captured 4 lunar phases at 1440px and 390px.
+    - `scripts/verify_tutor_ui.mjs`: Verified UI chat interactions, input sending, and chip clicks.
+    - `npm run lint`: 0 errors, 0 warnings.
+    - `npm run build`: 20/20 static pages generated cleanly.
 - **2026-11-01 (Hydration Warning Fix):**
   - Added `suppressHydrationWarning` to `<html>` and `<body>` in `src/app/layout.tsx` to prevent browser extensions (e.g. `cz-shortcut-listen`) from triggering Next.js dev overlay hydration warnings.
 - **2026-11-01 (Clean Architecture & 3D Stage Overhaul):**

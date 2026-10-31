@@ -3,22 +3,34 @@
 import React from 'react';
 import Image from 'next/image';
 import { TransitionLink } from '@/components/motion/TransitionLink';
+import { useApp } from '@/context/AppContext';
+
+interface LessonSidebarProps {
+  currentLessonId?: string;
+}
 
 interface LessonItem {
   id: string;
   number: number;
   title: string;
-  status: 'completed' | 'current' | 'locked';
 }
 
-const LEVEL_LESSONS: LessonItem[] = [
-  { id: 'earth-and-sky', number: 1, title: 'Earth & Sky', status: 'completed' },
-  { id: 'meet-the-moon', number: 2, title: 'Meet the Moon', status: 'current' },
-  { id: 'discover-planets', number: 3, title: 'Discover Planets', status: 'locked' },
-  { id: 'level-check-1', number: 4, title: 'Level Check', status: 'locked' },
+const LEVEL_1_ITEMS: LessonItem[] = [
+  { id: 'earth-and-sky', number: 1, title: 'Earth & Sky' },
+  { id: 'meet-the-moon', number: 2, title: 'Meet the Moon' },
+  { id: 'discover-planets', number: 3, title: 'Discover Planets' },
+  { id: 'level-check-1', number: 4, title: 'Level Check' },
 ];
 
-export const LessonSidebar: React.FC = () => {
+export const LessonSidebar: React.FC<LessonSidebarProps> = ({
+  currentLessonId = 'meet-the-moon',
+}) => {
+  const { user } = useApp();
+
+  const completedCount = LEVEL_1_ITEMS.filter((item) =>
+    user.completedLessonIds.includes(item.id)
+  ).length;
+
   return (
     <aside className="space-y-4">
       {/* 1. LEVEL PROGRESS CARD */}
@@ -26,7 +38,7 @@ export const LessonSidebar: React.FC = () => {
         <div className="flex items-center gap-3 pb-3 border-b border-line mb-3">
           <div className="relative w-9 h-9 rounded-full overflow-hidden border border-ink bg-paper-warm shadow-xs shrink-0">
             <Image
-              src="/assets/illustrations/moon_exact_clean.png"
+              src="/assets/illustrations/planet_level1_explorer.png"
               alt="Level 1 Explorer"
               fill
               className="object-cover"
@@ -38,21 +50,48 @@ export const LessonSidebar: React.FC = () => {
             </div>
             <div className="flex items-center gap-2 mt-0.5">
               <div className="w-16 h-1.5 bg-paper-warm rounded-full overflow-hidden border border-line">
-                <div className="h-full bg-mint w-2/4 rounded-full" />
+                <div
+                  className="h-full bg-mint rounded-full transition-all duration-300"
+                  style={{ width: `${(completedCount / 4) * 100}%` }}
+                />
               </div>
-              <span className="text-[10px] text-ink-muted">2/4 lessons</span>
+              <span className="text-[10px] text-ink-muted">
+                {completedCount}/4 lessons
+              </span>
             </div>
           </div>
         </div>
 
         {/* Lesson List */}
         <nav className="space-y-1.5" aria-label="Level 1 lessons">
-          {LEVEL_LESSONS.map((lesson) => {
-            if (lesson.status === 'completed') {
+          {LEVEL_1_ITEMS.map((item, idx) => {
+            const isCompleted = user.completedLessonIds.includes(item.id);
+            const isCurrent = item.id === currentLessonId;
+            const prevItem = idx > 0 ? LEVEL_1_ITEMS[idx - 1] : null;
+            const isUnlocked = idx === 0 || isCompleted || (prevItem && user.completedLessonIds.includes(prevItem.id));
+
+            if (isCurrent) {
+              return (
+                <div
+                  key={item.id}
+                  className="flex items-center justify-between p-2 rounded-lg text-xs font-bold bg-[#F2A23A] text-[#171715] border border-ink shadow-[1.5px_1.5px_0_var(--ink)]"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-[#171715] text-[#F7F4ED] flex items-center justify-center text-[10px] font-bold">
+                      {item.number}
+                    </span>
+                    <span>{item.title}</span>
+                  </div>
+                  <span className="text-xs">▶</span>
+                </div>
+              );
+            }
+
+            if (isCompleted) {
               return (
                 <TransitionLink
-                  key={lesson.id}
-                  href={`/lesson/${lesson.id}`}
+                  key={item.id}
+                  href={item.id.startsWith('level-check') ? `/check/level-1` : `/lesson/${item.id}`}
                   className="flex items-center justify-between p-2 rounded-lg text-xs font-semibold hover:bg-paper-warm transition-colors text-ink group"
                 >
                   <div className="flex items-center gap-2">
@@ -60,7 +99,7 @@ export const LessonSidebar: React.FC = () => {
                       ✓
                     </span>
                     <span className="group-hover:text-orange transition-colors">
-                      {lesson.title}
+                      {item.title}
                     </span>
                   </div>
                   <span className="text-mint text-xs">✓</span>
@@ -68,33 +107,36 @@ export const LessonSidebar: React.FC = () => {
               );
             }
 
-            if (lesson.status === 'current') {
+            if (isUnlocked) {
               return (
-                <div
-                  key={lesson.id}
-                  className="flex items-center justify-between p-2 rounded-lg text-xs font-bold bg-[#F2A23A] text-[#171715] border border-ink shadow-[1.5px_1.5px_0_var(--ink)]"
+                <TransitionLink
+                  key={item.id}
+                  href={item.id.startsWith('level-check') ? `/check/level-1` : `/lesson/${item.id}`}
+                  className="flex items-center justify-between p-2 rounded-lg text-xs font-semibold hover:bg-paper-warm transition-colors text-ink group"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-[#171715] text-[#F7F4ED] flex items-center justify-center text-[10px] font-bold">
-                      {lesson.number}
+                    <span className="w-5 h-5 rounded-full border border-line bg-paper-warm flex items-center justify-center text-[10px] font-semibold text-ink">
+                      {item.number}
                     </span>
-                    <span>{lesson.title}</span>
+                    <span className="group-hover:text-orange transition-colors">
+                      {item.title}
+                    </span>
                   </div>
-                  <span className="text-xs">▶</span>
-                </div>
+                  <span className="text-xs text-ink-muted">→</span>
+                </TransitionLink>
               );
             }
 
             return (
               <div
-                key={lesson.id}
+                key={item.id}
                 className="flex items-center justify-between p-2 rounded-lg text-xs font-medium text-ink-faint opacity-60 cursor-not-allowed select-none"
               >
                 <div className="flex items-center gap-2">
                   <span className="w-5 h-5 rounded-full border border-line bg-paper-warm flex items-center justify-center text-[10px]">
-                    {lesson.number}
+                    {item.number}
                   </span>
-                  <span>{lesson.title}</span>
+                  <span>{item.title}</span>
                 </div>
                 <span className="text-[10px]">🔒</span>
               </div>
@@ -114,11 +156,19 @@ export const LessonSidebar: React.FC = () => {
           </div>
           <div className="min-w-0 flex-1">
             <div className="text-xs font-bold text-ink truncate">
-              Discover Planets
+              {currentLessonId === 'earth-and-sky'
+                ? 'Meet the Moon'
+                : currentLessonId === 'meet-the-moon'
+                ? 'Discover Planets'
+                : 'Level 1 Check'}
             </div>
-            <div className="text-[10px] text-ink-muted">Lesson 3 · Locked</div>
+            <div className="text-[10px] text-ink-muted">
+              {user.completedLessonIds.includes(currentLessonId) ? 'Unlocked' : 'Locked'}
+            </div>
           </div>
-          <span className="text-xs text-ink-faint">🔒</span>
+          <span className="text-xs text-ink-faint">
+            {user.completedLessonIds.includes(currentLessonId) ? '→' : '🔒'}
+          </span>
         </div>
       </div>
 

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useApp } from '@/context/AppContext';
+import { QuizQuestion } from '@/types';
 
 interface Question {
   id: string;
@@ -11,7 +12,7 @@ interface Question {
   explanation: string;
 }
 
-const QUIZ_QUESTIONS: Question[] = [
+const DEFAULT_QUIZ_QUESTIONS: Question[] = [
   {
     id: 'q1',
     prompt: 'What causes the phases of the Moon?',
@@ -52,11 +53,13 @@ const QUIZ_QUESTIONS: Question[] = [
 
 interface LessonQuizProps {
   className?: string;
+  questions?: QuizQuestion[];
   onQuizComplete?: (score: number) => void;
 }
 
 export const LessonQuiz: React.FC<LessonQuizProps> = ({
   className = '',
+  questions,
   onQuizComplete,
 }) => {
   const { addXp } = useApp();
@@ -66,8 +69,18 @@ export const LessonQuiz: React.FC<LessonQuizProps> = ({
   const [score, setScore] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
 
-  const currentQ = QUIZ_QUESTIONS[currentIdx];
-  const total = QUIZ_QUESTIONS.length;
+  const activeQuestions: Question[] = questions && questions.length > 0
+    ? questions.map((q) => ({
+        id: q.id,
+        prompt: q.question,
+        options: q.options.map((o) => o.text),
+        correctIndex: Math.max(0, q.options.findIndex((o) => o.isCorrect)),
+        explanation: q.explanation,
+      }))
+    : DEFAULT_QUIZ_QUESTIONS;
+
+  const currentQ = activeQuestions[currentIdx] || activeQuestions[0];
+  const total = activeQuestions.length;
 
   const handleSelect = (idx: number) => {
     if (isAnswered) return;
@@ -122,7 +135,7 @@ export const LessonQuiz: React.FC<LessonQuizProps> = ({
           Quiz Completed!
         </h3>
         <p className="text-xs text-ink-muted mb-3">
-          You scored <strong className="text-orange">{score} / {total}</strong> on Lunar Mechanics!
+          You scored <strong className="text-orange">{score} / {total}</strong> on this mission!
         </p>
         <button
           type="button"
