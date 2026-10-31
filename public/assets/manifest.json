@@ -1,0 +1,135 @@
+{
+  "kaksha_logo": {
+    "src": "/assets/illustrations/kaksha_logo.png",
+    "width": 280,
+    "height": 50,
+    "purpose": "Brand logo and wordmark with orbit swoop",
+    "alt": "Kaksha The Space Academy logo"
+  },
+  "hero_earth_astronaut": {
+    "src": "/assets/illustrations/hero_earth_astronaut.png",
+    "width": 490,
+    "height": 410,
+    "purpose": "Hero astronaut boy and robot sitting on moon gazing at Earth and Saturn",
+    "alt": "Astronaut boy and robot gazing at Earth from Moon"
+  },
+  "planet_level1_explorer": {
+    "src": "/assets/illustrations/planet_level1_explorer.png",
+    "width": 140,
+    "height": 130,
+    "purpose": "Level 1 Explorer planet icon",
+    "alt": "Level 1 Explorer planet"
+  },
+  "planet_level2_cadet": {
+    "src": "/assets/illustrations/planet_level2_cadet.png",
+    "width": 180,
+    "height": 130,
+    "purpose": "Level 2 Cadet Saturn icon",
+    "alt": "Level 2 Cadet ringed planet"
+  },
+  "planet_level3_astronaut": {
+    "src": "/assets/illustrations/planet_level3_astronaut.png",
+    "width": 135,
+    "height": 130,
+    "purpose": "Level 3 Astronaut cratered planet icon",
+    "alt": "Level 3 Astronaut cratered planet"
+  },
+  "planet_level4_specialist": {
+    "src": "/assets/illustrations/planet_level4_specialist.png",
+    "width": 195,
+    "height": 130,
+    "purpose": "Level 4 Mission Specialist galaxy icon",
+    "alt": "Level 4 Mission Specialist spiral galaxy"
+  },
+  "how_step1_astronaut": {
+    "src": "/assets/illustrations/how_step1_astronaut.png",
+    "width": 110,
+    "height": 110,
+    "purpose": "How it works step 1 astronaut student",
+    "alt": "Astronaut taking test on tablet"
+  },
+  "how_step2_astronaut": {
+    "src": "/assets/illustrations/how_step2_astronaut.png",
+    "width": 100,
+    "height": 100,
+    "purpose": "How it works step 2 walking astronaut",
+    "alt": "Astronaut student walking forward"
+  },
+  "how_step3_flag": {
+    "src": "/assets/illustrations/how_step3_flag.png",
+    "width": 95,
+    "height": 120,
+    "purpose": "How it works step 3 star flag on lunar hill",
+    "alt": "Star flag on moon surface"
+  },
+  "mascot_saturn_curious": {
+    "src": "/assets/illustrations/mascot_saturn_curious.png",
+    "width": 240,
+    "height": 230,
+    "purpose": "Astronaut mascot sitting on Saturn with curiosity quote",
+    "alt": "Astronaut sitting atop ringed planet"
+  },
+  "hero_final_cta": {
+    "src": "/assets/illustrations/hero_final_cta.png",
+    "width": 140,
+    "height": 180,
+    "purpose": "Boy looking back at Earth for final CTA",
+    "alt": "Student gazing at bright Earth from lunar landscape"
+  },
+  "rocket_quiz_launch": {
+    "src": "/assets/illustrations/rocket_quiz_launch.png",
+    "width": 170,
+    "height": 220,
+    "purpose": "Dynamic rocket launching into space with plume",
+    "alt": "Rocket launching into space"
+  },
+  "moon_mission_surface": {
+    "src": "/assets/illustrations/moon_mission_surface.png",
+    "width": 185,
+    "height": 260,
+    "purpose": "High detail cratered Moon sphere for simulator and lesson",
+    "alt": "Detailed cratered surface of the Moon"
+  },
+  "earth_blue_marble": {
+    "src": "/assets/illustrations/earth_blue_marble.png",
+    "width": 210,
+    "height": 380,
+    "purpose": "Detailed Earth sphere from orbit view",
+    "alt": "Earth viewed from space orbit"
+  },
+  "mascot_tutor_robot": {
+    "src": "/assets/illustrations/mascot_tutor_robot.png",
+    "width": 145,
+    "height": 250,
+    "purpose": "Friendly floating robot AI Space Tutor mascot",
+    "alt": "AI Space Tutor friendly floating robot"
+  },
+  "moon_phases_diagram": {
+    "src": "/assets/illustrations/moon_phases_diagram.png",
+    "width": 300,
+    "height": 360,
+    "purpose": "Sun Earth Moon phase orbit diagram",
+    "alt": "Diagram showing Moon phases around Earth with Sunlight"
+  },
+  "mascot_celebrating_complete": {
+    "src": "/assets/illustrations/mascot_celebrating_complete.png",
+    "width": 280,
+    "height": 405,
+    "purpose": "Cheering boy astronaut and robot celebrating completion",
+    "alt": "Astronaut kid and robot celebrating with hands raised"
+  },
+  "mascot_levelup_cadet": {
+    "src": "/assets/illustrations/mascot_levelup_cadet.png",
+    "width": 315,
+    "height": 445,
+    "purpose": "Level Up celebration astronaut with Level 2 flag",
+    "alt": "Astronaut cheering next to Level 2 mission flag"
+  },
+  "aarav_avatar": {
+    "src": "/assets/illustrations/aarav_avatar.png",
+    "width": 95,
+    "height": 175,
+    "purpose": "Aarav student profile avatar with astronaut suit",
+    "alt": "Aarav profile portrait"
+  }
+}

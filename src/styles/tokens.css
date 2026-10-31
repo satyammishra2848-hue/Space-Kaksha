@@ -1,0 +1,64 @@
+:root {
+  --paper: #F7F4ED;
+  --paper-warm: #F0EBE1;
+  --surface: #FFFEFA;
+  --surface-muted: #EDE8DE;
+
+  --ink: #171715;
+  --ink-soft: #35342F;
+  --ink-muted: #6F6B63;
+  --ink-faint: #9B968C;
+  --line: #D9D2C6;
+  --line-strong: #24231F;
+
+  --orange: #F2A23A;
+  --orange-soft: #F9D7A1;
+  --yellow: #F3C95E;
+  --lavender: #B8A2E8;
+  --dusty-blue: #8DB8D7;
+  --mint: #9BC8A9;
+  --coral: #E58D7A;
+
+  --success: #397A50;
+  --success-soft: #DDEBDD;
+  --warning: #A86A20;
+  --error: #B44D43;
+
+  --night: #171B25;
+  --night-soft: #232936;
+  --night-line: #454A55;
+
+  --shadow-card: 0 8px 24px rgba(23,23,21,.06);
+  --shadow-hover: 0 12px 28px rgba(23,23,21,.10);
+  --shadow-popover: 0 16px 40px rgba(23,23,21,.14);
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-pill: 999px;
+
+  --space-1: .25rem;
+  --space-2: .5rem;
+  --space-3: .75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}
