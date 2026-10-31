@@ -110,6 +110,8 @@ Space Kaksha/
 ---
 
 ### Change Log
+- **2026-10-31 (Item 4: Component Language v2 & Editorial System):**
+  - Refined buttons and cards to ink-drawn editorial styling (1.5px ink border, 8px radius, 3px hard offset shadow, flat click press); recorded rules in DESIGN.md section 30; enabled TransitionLink across all nav and buttons.
 - **2026-10-31 (Item 3: Layout Overflow Prevention, Wavy Dividers & Scaled Navbar):**
   - Integrated organic wavy lunar SVG dividers between paper and night sections on Home and Test routes; enforced `overflow-x-clip` across html, body, and AppShell removing blank strip and footer gaps; increased navbar height to 80px and brand wordmark scale to match reference.
 - **2026-10-31 (Item 2: Tight Illustration Re-Crops & Organic Hero Blob):**

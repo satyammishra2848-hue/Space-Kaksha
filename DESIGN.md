@@ -1212,3 +1212,35 @@ pattern, 4. choose the simplest accessible implementation that preserves
 the design, 5. document meaningful deviations.
 
 **Kaksha --- Seekho orbit se.**
+
+------------------------------------------------------------------------
+
+# 30. Component language v2
+
+Refined editorial, ink-drawn design system replacing generic template cards:
+
+1. **Cards**:
+   - Ink border: 1.5px solid `--ink` (`#171715`).
+   - Radii: small radius between 6px and 10px (never above 12px; default 8px `--radius-card`).
+   - Fill: Flat `--surface` (`#FFFEFA`) or contextual tints (`--paper-warm`, `--mint-tint`).
+   - Hard offset shadow: `3px 3px 0 var(--ink)` (`--shadow-editorial`) that expands to `5px 5px 0 var(--ink)` on hover.
+   - Vary card shapes and fills by role; never use identical cards everywhere.
+   - Night cards use `--night-soft` with `1.5px solid var(--night-line)` and `3px 3px 0 var(--night-line)`.
+
+2. **Buttons**:
+   - Primary: Ink-filled (`--ink`) or Orange-filled (`--orange-bg`).
+   - Border: 2px solid `--ink`.
+   - Hard offset shadow: `3px 3px 0 var(--ink)`.
+   - Interaction: Presses flat on click (`translate(2px, 2px)` with `1px 1px 0 var(--ink)` shadow).
+   - Radius: 8px (`--radius-btn`). Pills reserved exclusively for chips and the language toggle.
+
+3. **Display Typography & Layout**:
+   - Large, tight display headings: `clamp(2.6rem, 5vw, 4.8rem)`, line-height 0.95, letter-spacing -0.02em, `text-wrap: balance`.
+   - Body copy: at least 17px with comfortable 1.6 line height.
+   - Accent color: Orange reserved for a single short emphasized phrase or tactical marker.
+   - 8px spacing rhythm applied consistently across grids and components.
+
+4. **Illustrations as Focal Points**:
+   - Hero artwork bleeds organically from the page contour inside an ink contour rather than a generic rounded box.
+   - Organic wavy SVG dividers (`WavyDivider`) separate paper and night sections.
+   - Live handwritten annotations in Caveat (`font-hand`).

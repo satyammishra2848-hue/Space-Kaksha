@@ -96,8 +96,8 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
             {/* Step 1 */}
-            <div className="bg-surface p-6 rounded-2xl border border-line shadow-2xs hover:shadow-card transition-all flex flex-col items-center text-center group">
-              <div className="w-10 h-10 rounded-full bg-mint text-ink font-bold flex items-center justify-center mb-4 text-base">
+            <div className="bg-surface p-6 rounded-lg border-[1.5px] border-ink shadow-[3px_3px_0_var(--ink)] hover:shadow-[5px_5px_0_var(--ink)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex flex-col items-center text-center group">
+              <div className="w-9 h-9 rounded-full border border-ink bg-mint text-ink font-bold flex items-center justify-center mb-4 text-sm shadow-[1.5px_1.5px_0_var(--ink)]">
                 1
               </div>
               <div className="relative w-28 h-28 mb-4">
@@ -115,8 +115,8 @@ export default function HomePage() {
             </div>
 
             {/* Step 2 */}
-            <div className="bg-surface p-6 rounded-2xl border border-line shadow-2xs hover:shadow-card transition-all flex flex-col items-center text-center group">
-              <div className="w-10 h-10 rounded-full bg-lavender text-ink font-bold flex items-center justify-center mb-4 text-base">
+            <div className="bg-surface p-6 rounded-lg border-[1.5px] border-ink shadow-[3px_3px_0_var(--ink)] hover:shadow-[5px_5px_0_var(--ink)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex flex-col items-center text-center group">
+              <div className="w-9 h-9 rounded-full border border-ink bg-lavender text-ink font-bold flex items-center justify-center mb-4 text-sm shadow-[1.5px_1.5px_0_var(--ink)]">
                 2
               </div>
               <div className="relative w-28 h-28 mb-4">
@@ -134,8 +134,8 @@ export default function HomePage() {
             </div>
 
             {/* Step 3 */}
-            <div className="bg-surface p-6 rounded-2xl border border-line shadow-2xs hover:shadow-card transition-all flex flex-col items-center text-center group">
-              <div className="w-10 h-10 rounded-full bg-orange text-ink font-bold flex items-center justify-center mb-4 text-base">
+            <div className="bg-surface p-6 rounded-lg border-[1.5px] border-ink shadow-[3px_3px_0_var(--ink)] hover:shadow-[5px_5px_0_var(--ink)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex flex-col items-center text-center group">
+              <div className="w-9 h-9 rounded-full border border-ink bg-orange text-ink font-bold flex items-center justify-center mb-4 text-sm shadow-[1.5px_1.5px_0_var(--ink)]">
                 3
               </div>
               <div className="relative w-28 h-28 mb-4">
@@ -174,7 +174,7 @@ export default function HomePage() {
             {LEVELS.map((lvl) => (
               <div
                 key={lvl.id}
-                className="bg-night-soft/90 border border-night-line rounded-2xl p-5 flex flex-col justify-between hover:border-orange/60 transition-all group"
+                className="bg-night-soft/95 border-[1.5px] border-night-line rounded-lg p-5 flex flex-col justify-between shadow-[3px_3px_0_var(--night-line)] hover:border-orange hover:shadow-[4px_4px_0_var(--orange)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all group"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
@@ -380,8 +380,8 @@ export default function HomePage() {
             <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
               
               {/* Feature 1 */}
-              <div className="bg-surface p-6 rounded-2xl border border-line shadow-2xs hover:shadow-card transition-all flex flex-col justify-between">
-                <div className="w-12 h-12 rounded-xl bg-orange/15 text-orange flex items-center justify-center text-2xl mb-4">
+              <div className="bg-surface p-6 rounded-lg border-[1.5px] border-ink shadow-[3px_3px_0_var(--ink)] hover:shadow-[5px_5px_0_var(--ink)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex flex-col justify-between">
+                <div className="w-12 h-12 rounded-lg bg-orange/15 text-orange flex items-center justify-center text-2xl mb-4 border border-line">
                   🚀
                 </div>
                 <div>
@@ -395,8 +395,8 @@ export default function HomePage() {
               </div>
 
               {/* Feature 2 */}
-              <div className="bg-surface p-6 rounded-2xl border border-line shadow-2xs hover:shadow-card transition-all flex flex-col justify-between">
-                <div className="w-12 h-12 rounded-xl bg-lavender/30 text-lavender flex items-center justify-center text-2xl mb-4">
+              <div className="bg-paper-warm p-6 rounded-lg border-[1.5px] border-ink shadow-[3px_3px_0_var(--ink)] hover:shadow-[5px_5px_0_var(--ink)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex flex-col justify-between">
+                <div className="w-12 h-12 rounded-lg bg-lavender/30 text-lavender flex items-center justify-center text-2xl mb-4 border border-line">
                   🤖
                 </div>
                 <div>
@@ -410,8 +410,8 @@ export default function HomePage() {
               </div>
 
               {/* Feature 3 */}
-              <div className="bg-surface p-6 rounded-2xl border border-line shadow-2xs hover:shadow-card transition-all flex flex-col justify-between">
-                <div className="w-12 h-12 rounded-xl bg-mint/30 text-success flex items-center justify-center text-lg font-bold mb-4">
+              <div className="bg-surface p-6 rounded-lg border-[1.5px] border-ink shadow-[3px_3px_0_var(--ink)] hover:shadow-[5px_5px_0_var(--ink)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex flex-col justify-between">
+                <div className="w-12 h-12 rounded-lg bg-mint/30 text-success flex items-center justify-center text-lg font-bold mb-4 border border-line">
                   A अ
                 </div>
                 <div>

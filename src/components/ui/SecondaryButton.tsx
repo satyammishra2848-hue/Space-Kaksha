@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from 'next/link';
+import { TransitionLink } from '@/components/motion/TransitionLink';
 
 interface SecondaryButtonProps {
   children: React.ReactNode;
@@ -23,20 +23,20 @@ export const SecondaryButton: React.FC<SecondaryButtonProps> = ({
   ariaLabel,
 }) => {
   const sizeClasses = {
-    sm: 'px-4 py-1.5 text-xs font-medium',
-    md: 'px-5 py-2.5 text-sm font-semibold',
-    lg: 'px-6 py-3 text-base font-bold',
+    sm: 'px-4 py-1.5 text-xs font-semibold',
+    md: 'px-5 py-2 text-sm font-bold',
+    lg: 'px-6 py-2.5 text-base font-bold',
   }[size];
 
-  const baseClasses = `inline-flex items-center justify-center gap-2 rounded-full cursor-pointer transition-all duration-150 select-none text-center border border-line bg-surface text-ink hover:border-ink hover:bg-paper-warm active:scale-98 ${sizeClasses} ${
-    disabled ? 'opacity-40 cursor-not-allowed pointer-events-none' : 'hover:shadow-xs'
+  const baseClasses = `inline-flex items-center justify-center gap-2 rounded-lg cursor-pointer transition-all duration-100 select-none text-center border-2 border-ink bg-surface text-ink shadow-[3px_3px_0_var(--ink)] hover:shadow-[4px_4px_0_var(--ink)] hover:bg-paper-warm active:shadow-[1px_1px_0_var(--ink)] active:translate-x-[2px] active:translate-y-[2px] ${sizeClasses} ${
+    disabled ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''
   } ${className}`;
 
   if (href && !disabled) {
     return (
-      <Link href={href} className={baseClasses} aria-label={ariaLabel}>
+      <TransitionLink href={href} className={baseClasses} aria-label={ariaLabel}>
         {children}
-      </Link>
+      </TransitionLink>
     );
   }
 

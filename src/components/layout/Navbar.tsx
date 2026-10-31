@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, Suspense } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { TransitionLink } from '@/components/motion/TransitionLink';
 import { KakshaLogo } from '@/components/ui/KakshaLogo';
 import { LanguageToggle } from '@/components/ui/LanguageToggle';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
@@ -36,45 +36,45 @@ function NavbarInner({ variant = 'auto', className = '' }: NavbarProps) {
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-ink-soft" aria-label="Main navigation">
           {resolvedVariant === 'logged-out' ? (
             <>
-              <Link href="/#how-it-works" className="hover:text-ink transition-colors">
+              <TransitionLink href="/#how-it-works" className="hover:text-ink transition-colors">
                 {t('nav_how_it_works')}
-              </Link>
-              <Link href="/#levels" className="hover:text-ink transition-colors">
+              </TransitionLink>
+              <TransitionLink href="/#levels" className="hover:text-ink transition-colors">
                 {t('nav_levels')}
-              </Link>
-              <Link href="/#explore" className="hover:text-ink transition-colors">
+              </TransitionLink>
+              <TransitionLink href="/#explore" className="hover:text-ink transition-colors">
                 {t('nav_explore')}
-              </Link>
-              <Link href="/#about" className="hover:text-ink transition-colors">
+              </TransitionLink>
+              <TransitionLink href="/#about" className="hover:text-ink transition-colors">
                 {t('nav_about')}
-              </Link>
+              </TransitionLink>
             </>
           ) : (
             <>
-              <Link
+              <TransitionLink
                 href="/"
                 className={`hover:text-ink transition-colors ${pathname === '/' ? 'text-ink font-semibold' : ''}`}
               >
                 Home
-              </Link>
-              <Link
+              </TransitionLink>
+              <TransitionLink
                 href="/#explore"
                 className="hover:text-ink transition-colors"
               >
                 {t('nav_explore')}
-              </Link>
-              <Link
+              </TransitionLink>
+              <TransitionLink
                 href="/#levels"
                 className="hover:text-ink transition-colors"
               >
                 {t('nav_levels')}
-              </Link>
-              <Link
+              </TransitionLink>
+              <TransitionLink
                 href="/path"
                 className={`hover:text-ink transition-colors ${pathname.startsWith('/path') ? 'text-ink font-bold underline decoration-orange decoration-2 underline-offset-4' : ''}`}
               >
                 {t('nav_my_path')}
-              </Link>
+              </TransitionLink>
             </>
           )}
         </nav>
@@ -99,7 +99,7 @@ function NavbarInner({ variant = 'auto', className = '' }: NavbarProps) {
                 <StreakChip days={user.streakDays} />
                 <XpChip xp={user.xp} />
               </div>
-              <Link
+              <TransitionLink
                 href="/profile"
                 className="flex items-center gap-2 pl-1 pr-2 py-1 rounded-full border border-line bg-surface hover:border-ink transition-all group"
                 title="View Profile"
@@ -111,7 +111,7 @@ function NavbarInner({ variant = 'auto', className = '' }: NavbarProps) {
                   {user.name}
                 </span>
                 <span className="text-[10px] text-ink-muted">▼</span>
-              </Link>
+              </TransitionLink>
             </div>
           )}
 
@@ -138,41 +138,41 @@ function NavbarInner({ variant = 'auto', className = '' }: NavbarProps) {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-line bg-surface px-4 py-4 space-y-3">
           <div className="flex flex-col gap-2.5 text-sm font-medium">
-            <Link
+            <TransitionLink
               href="/"
               onClick={() => setMobileMenuOpen(false)}
               className="py-1.5 px-2 rounded hover:bg-paper"
             >
               Home
-            </Link>
-            <Link
+            </TransitionLink>
+            <TransitionLink
               href="/path"
               onClick={() => setMobileMenuOpen(false)}
               className="py-1.5 px-2 rounded hover:bg-paper"
             >
               {t('nav_my_path')}
-            </Link>
-            <Link
+            </TransitionLink>
+            <TransitionLink
               href="/profile"
               onClick={() => setMobileMenuOpen(false)}
               className="py-1.5 px-2 rounded hover:bg-paper"
             >
               {t('nav_profile')}
-            </Link>
-            <Link
+            </TransitionLink>
+            <TransitionLink
               href="/tutor"
               onClick={() => setMobileMenuOpen(false)}
               className="py-1.5 px-2 rounded hover:bg-paper"
             >
               {t('nav_tutor')}
-            </Link>
-            <Link
+            </TransitionLink>
+            <TransitionLink
               href="/#levels"
               onClick={() => setMobileMenuOpen(false)}
               className="py-1.5 px-2 rounded hover:bg-paper"
             >
               {t('nav_levels')}
-            </Link>
+            </TransitionLink>
           </div>
           {resolvedVariant === 'logged-in' && (
             <div className="pt-2 border-t border-line flex items-center justify-between text-xs">
