@@ -5,9 +5,11 @@ import Link from 'next/link';
 import { KakshaLogo } from '@/components/ui/KakshaLogo';
 import { LanguageToggle } from '@/components/ui/LanguageToggle';
 import { useApp } from '@/context/AppContext';
+import { useReducedMotion } from '@/context/MotionContext';
 
 export const Footer: React.FC = () => {
   const { t } = useApp();
+  const { reducedMotion, toggleReducedMotion } = useReducedMotion();
 
   return (
     <footer className="w-full bg-paper border-t border-line py-8 transition-colors">
@@ -39,9 +41,21 @@ export const Footer: React.FC = () => {
           </span>
         </nav>
 
-        {/* Right: Language toggle, social icons & copyright */}
+        {/* Right: Language toggle, motion toggle, social icons & copyright */}
         <div className="flex flex-col sm:flex-row items-center gap-4">
           <LanguageToggle />
+
+          {/* Accessible Reduced Motion Toggle */}
+          <button
+            type="button"
+            onClick={toggleReducedMotion}
+            className="text-xs px-2.5 py-1 rounded-full border border-line hover:border-ink transition-colors flex items-center gap-1.5 text-ink-muted hover:text-ink cursor-pointer bg-surface/80"
+            title={reducedMotion ? "Enable animations" : "Reduce motion animations"}
+            aria-pressed={reducedMotion}
+          >
+            <span className={`w-2 h-2 rounded-full transition-colors ${reducedMotion ? 'bg-orange' : 'bg-mint'}`} />
+            <span>{reducedMotion ? "Motion: Off" : "Reduce motion"}</span>
+          </button>
 
           {/* Social Icons */}
           <div className="flex items-center gap-3 text-ink-soft">

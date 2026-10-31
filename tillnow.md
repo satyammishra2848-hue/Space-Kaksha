@@ -110,6 +110,8 @@ Space Kaksha/
 ---
 
 ### Change Log
+- **2026-10-31 (Item 3: Layout Overflow Prevention, Wavy Dividers & Scaled Navbar):**
+  - Integrated organic wavy lunar SVG dividers between paper and night sections on Home and Test routes; enforced `overflow-x-clip` across html, body, and AppShell removing blank strip and footer gaps; increased navbar height to 80px and brand wordmark scale to match reference.
 - **2026-10-31 (Item 2: Tight Illustration Re-Crops & Organic Hero Blob):**
   - Re-cropped all assets removing baked-in label text ("NER", "ADET", "UT", "CIALIST") and handwriting; keyed backgrounds to transparent alpha; styled hero illustration to bleed organically from right edge with live Caveat hand text "Same Sky. Bigger Dreams."
 - **2026-10-31 (Item 1: Dark-Text Contrast Scoping):**

@@ -26,7 +26,7 @@ function NavbarInner({ variant = 'auto', className = '' }: NavbarProps) {
 
   return (
     <header className={`w-full bg-paper/95 backdrop-blur-xs border-b border-line sticky top-0 z-40 transition-colors ${className}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
         {/* Left: Brand Logo */}
         <div className="flex items-center gap-6">
           <KakshaLogo />

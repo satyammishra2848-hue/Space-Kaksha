@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Space_Grotesk, Inter, Caveat } from 'next/font/google';
 import './globals.css';
 import { AppContextProvider } from '@/context/AppContext';
+import { MotionProvider } from '@/context/MotionContext';
 
 const spaceGrotesk = Space_Grotesk({
   variable: '--font-display',
@@ -39,10 +40,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} ${caveat.variable} h-full`}>
-      <body className="min-h-full flex flex-col bg-paper text-ink font-body antialiased">
-        <AppContextProvider>
-          {children}
-        </AppContextProvider>
+      <body className="min-h-full flex flex-col bg-paper text-ink font-body antialiased overflow-x-clip">
+        <MotionProvider>
+          <AppContextProvider>
+            {children}
+          </AppContextProvider>
+        </MotionProvider>
       </body>
     </html>
   );

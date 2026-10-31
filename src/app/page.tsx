@@ -8,6 +8,7 @@ import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { SpaceDoodle } from '@/components/space/SpaceDoodle';
 import { useApp } from '@/context/AppContext';
 import { LEVELS } from '@/content/levels';
+import { WavyDivider } from '@/components/ui/WavyDivider';
 
 export default function HomePage() {
   const { t, locale } = useApp();
@@ -154,8 +155,11 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Organic lunar transition from warm paper into night */}
+      <WavyDivider variant="warm-to-night" />
+
       {/* 3. FOUR LEVELS SECTION */}
-      <section id="levels" className="py-16 md:py-24 bg-night text-[var(--on-night)] starfield-bg border-b border-night-line theme-night">
+      <section id="levels" className="py-16 md:py-24 bg-night text-[var(--on-night)] starfield-bg theme-night">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold uppercase tracking-tight text-[var(--on-night)]">
@@ -225,6 +229,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Organic lunar transition from night back to paper */}
+      <WavyDivider variant="night-to-paper" />
 
       {/* 4. YOUR SPACE JOURNEY PATH PREVIEW */}
       <section id="explore" className="py-16 md:py-24 bg-paper border-b border-line">
@@ -437,6 +444,9 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Organic lunar transition into Final CTA */}
+      <WavyDivider variant="warm-to-night" />
+
       {/* 6. FINAL CTA SECTION */}
       <section className="py-16 md:py-24 bg-night text-[var(--on-night)] starfield-bg relative overflow-hidden theme-night">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -478,6 +488,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Organic transition back to paper footer */}
+      <WavyDivider variant="night-to-paper" />
     </AppShell>
   );
 }

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { AppShell } from '@/components/layout/AppShell';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
+import { WavyDivider } from '@/components/ui/WavyDivider';
 import { SecondaryButton } from '@/components/ui/SecondaryButton';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { PLACEMENT_QUESTIONS } from '@/content/questions';
@@ -207,8 +208,11 @@ export default function PlacementTestPage() {
 
         </div>
 
+        {/* Organic lunar transition into night banner */}
+        <WavyDivider variant="warm-to-night" className="mt-12 -mb-[1px]" />
+
         {/* Bottom Banner Section */}
-        <section className="bg-night text-[var(--on-night)] starfield-bg py-10 border-t border-night-line mt-12 theme-night">
+        <section className="bg-night text-[var(--on-night)] starfield-bg py-10 theme-night">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
             <div>
               <h3 className="text-xl sm:text-2xl font-bold uppercase tracking-tight text-[var(--on-night)]">

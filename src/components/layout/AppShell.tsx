@@ -16,9 +16,9 @@ export const AppShell: React.FC<AppShellProps> = ({
   className = '',
 }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-paper text-ink">
+    <div className="min-h-screen flex flex-col bg-paper text-ink w-full overflow-x-clip">
       <Navbar variant={navbarVariant} />
-      <main className={`flex-1 w-full ${className}`}>
+      <main className={`flex-1 w-full overflow-x-clip ${className}`}>
         {children}
       </main>
       {!hideFooter && <Footer />}
