@@ -155,13 +155,13 @@ export default function HomePage() {
       </section>
 
       {/* 3. FOUR LEVELS SECTION */}
-      <section id="levels" className="py-16 md:py-24 bg-night text-surface starfield-bg border-b border-line">
+      <section id="levels" className="py-16 md:py-24 bg-night text-[var(--on-night)] starfield-bg border-b border-night-line theme-night">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold uppercase tracking-tight text-surface">
+            <h2 className="text-2xl sm:text-3xl font-bold uppercase tracking-tight text-[var(--on-night)]">
               FOUR LEVELS. <span className="text-orange">ENDLESS POSSIBILITIES.</span>
             </h2>
-            <p className="text-sm text-ink-faint mt-1">
+            <p className="text-sm text-[var(--on-night-soft)] mt-1">
               Curated astronomy curriculum from planetary foundations to deep space physics.
             </p>
           </div>
@@ -182,12 +182,12 @@ export default function HomePage() {
                       LEVEL {lvl.number}
                     </span>
                     {lvl.isComingSoon && (
-                      <span className="text-[10px] font-medium text-ink-faint border border-night-line px-1.5 py-0.5 rounded-sm">
+                      <span className="text-[10px] font-medium text-[var(--on-night-muted)] border border-night-line px-1.5 py-0.5 rounded-sm">
                         Soon
                       </span>
                     )}
                   </div>
-                  <h3 className="text-base font-bold text-surface uppercase mb-1">
+                  <h3 className="text-base font-bold text-[var(--on-night)] uppercase mb-1">
                     {lvl.name}
                   </h3>
                   <p className="text-xs text-orange font-medium mb-4">
@@ -206,13 +206,13 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-night-line/60 flex items-center justify-between text-xs text-ink-faint">
+                <div className="pt-3 border-t border-night-line/60 flex items-center justify-between text-xs text-[var(--on-night-muted)]">
                   <span>{lvl.lessonsCount} missions</span>
                   <Link
                     href={lvl.isComingSoon ? '#levels' : '/path'}
                     className={`w-7 h-7 rounded-full flex items-center justify-center border transition-all ${
                       lvl.isComingSoon
-                        ? 'border-night-line text-ink-faint cursor-not-allowed opacity-50'
+                        ? 'border-night-line text-[var(--on-night-muted)] cursor-not-allowed opacity-50'
                         : 'border-orange text-orange hover:bg-orange hover:text-night'
                     }`}
                     aria-label={`Explore Level ${lvl.number} ${lvl.name}`}
@@ -438,7 +438,7 @@ export default function HomePage() {
       </section>
 
       {/* 6. FINAL CTA SECTION */}
-      <section className="py-16 md:py-24 bg-night text-surface starfield-bg relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-night text-[var(--on-night)] starfield-bg relative overflow-hidden theme-night">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
@@ -459,12 +459,12 @@ export default function HomePage() {
 
             {/* Right CTA */}
             <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold uppercase tracking-tight text-surface leading-tight">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold uppercase tracking-tight text-[var(--on-night)] leading-tight">
                 YOUR SPACE JOURNEY <br />
                 <span className="text-orange">STARTS HERE.</span>
               </h2>
 
-              <p className="text-sm sm:text-base text-ink-faint max-w-xl">
+              <p className="text-sm sm:text-base text-[var(--on-night-soft)] max-w-xl">
                 Take a quick 12-question mission check to find your starting orbit. No pressure, no grading stress—just pure curiosity.
               </p>
 

@@ -110,6 +110,8 @@ Space Kaksha/
 ---
 
 ### Change Log
+- **2026-10-31 (Item 1: Dark-Text Contrast Scoping):**
+  - Fully mapped all night sections in `src/app/page.tsx`, `test/page.tsx`, and `result/page.tsx` with `.theme-night` and explicit `--on-night`, `--on-night-soft`, and `--on-night-muted` tokens; all 21 contrast pairs verified passing WCAG AA (node scripts/contrast.mjs).
 - **2026-10-31 (Phases B to G Complete):**
   - Resolved Next.js 16 prerender boundary requirements by separating Server Components (`page.tsx`) and Client Components (`LevelCheckClient`, `LessonDetailClient`) with `generateStaticParams`.
   - Fixed all ESLint 9 / React 19 warnings and errors; `npm run lint` passes cleanly.

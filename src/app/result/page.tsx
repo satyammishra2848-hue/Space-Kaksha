@@ -142,7 +142,7 @@ export default function ResultsPage() {
         </section>
 
         {/* 3. WHAT THIS MEANS */}
-        <section className="bg-night text-surface rounded-2xl border border-night-line p-6 sm:p-8 starfield-bg">
+        <section className="bg-night text-[var(--on-night)] rounded-2xl border border-night-line p-6 sm:p-8 starfield-bg theme-night">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
             
             <div className="md:col-span-8 space-y-3">
@@ -150,7 +150,7 @@ export default function ResultsPage() {
                 <span>✦</span>
                 <span>WHAT THIS MEANS</span>
               </div>
-              <p className="text-sm sm:text-base text-ink-faint leading-relaxed">
+              <p className="text-sm sm:text-base text-[var(--on-night-soft)] leading-relaxed">
                 You have a good understanding of the basics. You&apos;re ready to start your space learning journey from Level 1, where you&apos;ll explore the wonders of our universe step by step.
               </p>
             </div>
@@ -299,13 +299,13 @@ export default function ResultsPage() {
         </section>
 
         {/* 6. BOTTOM BANNER */}
-        <section className="bg-night text-surface starfield-bg rounded-3xl p-8 sm:p-10 border border-night-line flex flex-col sm:flex-row items-center justify-between gap-6">
+        <section className="bg-night text-[var(--on-night)] starfield-bg rounded-3xl p-8 sm:p-10 border border-night-line flex flex-col sm:flex-row items-center justify-between gap-6 theme-night">
           <div className="space-y-2 text-center sm:text-left">
             <div className="text-xs font-bold text-orange uppercase flex items-center justify-center sm:justify-start gap-1.5">
               <span>✦</span>
               <span>READY TO BEGIN?</span>
             </div>
-            <h3 className="text-2xl sm:text-3xl font-bold uppercase tracking-tight text-surface">
+            <h3 className="text-2xl sm:text-3xl font-bold uppercase tracking-tight text-[var(--on-night)]">
               LET&apos;S EXPLORE <span className="text-orange">TOGETHER.</span>
             </h3>
             <p className="text-xs font-hand text-yellow text-base">

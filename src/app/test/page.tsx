@@ -208,13 +208,13 @@ export default function PlacementTestPage() {
         </div>
 
         {/* Bottom Banner Section */}
-        <section className="bg-night text-surface starfield-bg py-10 border-t border-line mt-12">
+        <section className="bg-night text-[var(--on-night)] starfield-bg py-10 border-t border-night-line mt-12 theme-night">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
             <div>
-              <h3 className="text-xl sm:text-2xl font-bold uppercase tracking-tight text-surface">
+              <h3 className="text-xl sm:text-2xl font-bold uppercase tracking-tight text-[var(--on-night)]">
                 Ready when you are.
               </h3>
-              <p className="text-xs text-ink-faint mt-1">
+              <p className="text-xs text-[var(--on-night-soft)] mt-1">
                 Your space journey starts here. Discover what you already know.
               </p>
             </div>
