@@ -1,6 +1,6 @@
 import React from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
+import { TransitionLink } from '@/components/motion/TransitionLink';
 
 interface KakshaLogoProps {
   className?: string;
@@ -12,7 +12,7 @@ export const KakshaLogo: React.FC<KakshaLogoProps> = ({
   showTagline = true,
 }) => {
   return (
-    <Link href="/" className={`inline-flex items-center gap-2 group ${className}`}>
+    <TransitionLink href="/" className={`inline-flex items-center gap-2 group ${className}`}>
       <div className="relative h-12 w-auto flex items-center">
         {/* Crisp cropped authentic reference logo matching full reference scale */}
         <div className="relative w-40 h-10 sm:w-48 sm:h-12">
@@ -30,6 +30,6 @@ export const KakshaLogo: React.FC<KakshaLogoProps> = ({
           Seekho orbit se.
         </span>
       )}
-    </Link>
+    </TransitionLink>
   );
 };

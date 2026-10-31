@@ -27,10 +27,7 @@ export const DrawPath: React.FC<DrawPathProps> = ({
   const [totalLength, setTotalLength] = useState(1000);
 
   useEffect(() => {
-    if (reducedMotion) {
-      setIsDrawn(true);
-      return;
-    }
+    if (reducedMotion) return;
 
     const path = pathRef.current;
     if (!path) return;

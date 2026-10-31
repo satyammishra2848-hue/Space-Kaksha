@@ -7,6 +7,34 @@
   --foreground: var(--ink);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+button, a, [role="button"], [role="radio"] {
+  cursor: pointer;
+}
+
+/* Explicit Core Utility Classes ensuring 100% reliability */
+.bg-ink {
+  background-color: var(--ink) !important;
+}
+.text-ink {
+  color: var(--ink) !important;
+}
+.border-ink {
+  border-color: var(--ink) !important;
+}
+.bg-paper {
+  background-color: var(--paper) !important;
+}
+.text-paper {
+  color: var(--paper) !important;
+}
+.bg-orange-fill {
+  background-color: var(--orange-bg) !important;
+}
+
 html, body {
   background-color: var(--paper);
   color: var(--ink);

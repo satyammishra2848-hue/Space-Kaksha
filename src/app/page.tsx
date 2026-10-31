@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { TransitionLink } from '@/components/motion/TransitionLink';
 import { AppShell } from '@/components/layout/AppShell';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { SpaceDoodle } from '@/components/space/SpaceDoodle';
@@ -15,6 +15,19 @@ import { Stagger } from '@/components/motion/Stagger';
 export default function HomePage() {
   const { t, locale } = useApp();
   const [activeJourneyLevel, setActiveJourneyLevel] = useState<number>(1);
+
+  // Smooth scroll to hash anchor on page load
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash) {
+      const hash = window.location.hash.substring(1);
+      const el = document.getElementById(hash);
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 150);
+      }
+    }
+  }, []);
 
   return (
     <AppShell navbarVariant="logged-out">
@@ -66,20 +79,50 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right Hero Illustration: Bleeds organically towards the right edge */}
+            {/* Right Hero Illustration: Bleeds organically with delightful interactive cosmic hover */}
             <div className="lg:col-span-5 relative flex flex-col items-center lg:items-end justify-center">
-              <div className="relative w-full max-w-lg lg:max-w-none aspect-[483/402] -mr-0 lg:-mr-8 xl:-mr-12">
-                <Image
-                  src="/assets/illustrations/hero_earth_astronaut.png"
-                  alt="Astronaut child and robot sitting on moon observing Earth in space"
-                  fill
-                  className="object-contain object-right"
-                  priority
+              <div className="group relative w-full max-w-lg lg:max-w-none aspect-[483/402] -mr-0 lg:-mr-8 xl:-mr-12 cursor-pointer">
+                {/* Cosmic ethereal background glow on hover */}
+                <div
+                  aria-hidden="true"
+                  className="absolute -inset-4 rounded-[60px] bg-radial from-orange/30 via-yellow/15 to-transparent blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10"
                 />
-                {/* Live handwritten note rendered in Caveat hand font */}
-                <div className="absolute bottom-4 left-2 sm:left-4 lg:-left-4 bg-surface/95 px-3 py-1.5 rounded-md border border-line shadow-editorial text-xs sm:text-sm font-hand text-ink flex items-center gap-1.5 -rotate-2 select-none">
-                  <span className="text-yellow">✦</span>
-                  <span>Same Sky. Bigger Dreams.</span>
+
+                {/* Floating twinkling celestial star doodles that appear on hover */}
+                <span
+                  aria-hidden="true"
+                  className="absolute -top-2 right-16 text-yellow text-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:-translate-y-2 group-hover:scale-125 select-none pointer-events-none z-20"
+                >
+                  ✦
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="absolute top-1/3 left-4 text-orange text-sm opacity-0 group-hover:opacity-100 transition-all duration-400 delay-100 transform group-hover:-translate-x-2 group-hover:scale-125 select-none pointer-events-none z-20"
+                >
+                  ✧
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="absolute top-12 right-6 text-yellow text-xs opacity-0 group-hover:opacity-100 transition-all duration-500 delay-150 transform group-hover:rotate-45 group-hover:scale-150 select-none pointer-events-none z-20"
+                >
+                  ★
+                </span>
+
+                {/* Main Hero Artwork with subtle tilt, scale, and orbital perspective shift */}
+                <div className="relative w-full h-full transform transition-all duration-500 ease-out group-hover:scale-[1.03] group-hover:-rotate-1 group-hover:drop-shadow-[0_12px_32px_rgba(242,162,58,0.22)]">
+                  <Image
+                    src="/assets/illustrations/hero_earth_astronaut.png"
+                    alt="Astronaut child and robot sitting on moon observing Earth in space"
+                    fill
+                    className="object-contain object-right"
+                    priority
+                  />
+                </div>
+
+                {/* Live handwritten note rendered in Caveat hand font with lively responsive spring */}
+                <div className="absolute bottom-4 left-2 sm:left-4 lg:-left-4 bg-surface px-3.5 py-1.5 rounded-lg border-2 border-ink shadow-[3px_3px_0_var(--ink)] group-hover:shadow-[5px_5px_0_var(--ink)] group-hover:-translate-y-1.5 group-hover:rotate-0 text-xs sm:text-sm font-hand text-ink flex items-center gap-1.5 -rotate-2 select-none transition-all duration-200">
+                  <span className="text-yellow group-hover:rotate-45 group-hover:scale-125 transition-transform inline-block">✦</span>
+                  <span className="font-bold">Same Sky. Bigger Dreams.</span>
                 </div>
               </div>
             </div>
@@ -218,7 +261,7 @@ export default function HomePage() {
 
                 <div className="pt-3 border-t border-night-line/60 flex items-center justify-between text-xs text-[var(--on-night-muted)]">
                   <span>{lvl.lessonsCount} missions</span>
-                  <Link
+                  <TransitionLink
                     href={lvl.isComingSoon ? '#levels' : '/path'}
                     className={`w-7 h-7 rounded-full flex items-center justify-center border transition-all ${
                       lvl.isComingSoon
@@ -228,7 +271,7 @@ export default function HomePage() {
                     aria-label={`Explore Level ${lvl.number} ${lvl.name}`}
                   >
                     →
-                  </Link>
+                  </TransitionLink>
                 </div>
               </div>
             ))}

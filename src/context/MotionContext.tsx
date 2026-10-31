@@ -14,25 +14,25 @@ const MotionContext = createContext<MotionContextType>({
 });
 
 export const MotionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [reducedMotion, setReducedMotion] = useState<boolean>(false);
+  const [reducedMotion, setReducedMotion] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('kaksha_reduced_motion');
+      if (saved !== null) return saved === 'true';
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+    return false;
+  });
 
   useEffect(() => {
     // 1. Mark html as JS-enabled for safe-by-default motion styles
     document.documentElement.classList.add('js');
 
-    // 2. Check system preference and localStorage
-    const saved = localStorage.getItem('kaksha_reduced_motion');
-    const systemPrefers = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    const initial = saved !== null ? saved === 'true' : systemPrefers;
-    setReducedMotion(initial);
-
-    if (initial) {
+    if (reducedMotion) {
       document.documentElement.classList.add('reduce-motion');
     } else {
       document.documentElement.classList.remove('reduce-motion');
     }
-  }, []);
+  }, [reducedMotion]);
 
   const toggleReducedMotion = () => {
     setReducedMotion((prev) => {

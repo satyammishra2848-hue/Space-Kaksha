@@ -1,7 +1,7 @@
 // src/components/motion/Stagger.tsx
 'use client';
 
-import React, { useEffect, useRef, useState, Children, isValidElement, cloneElement } from 'react';
+import React, { useEffect, useRef, useState, Children } from 'react';
 import { useReducedMotion } from '@/context/MotionContext';
 
 interface StaggerProps {
@@ -22,10 +22,7 @@ export const Stagger: React.FC<StaggerProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (reducedMotion) {
-      setIsVisible(true);
-      return;
-    }
+    if (reducedMotion) return;
 
     const container = containerRef.current;
     if (!container) return;

@@ -10,7 +10,7 @@ export interface TransitionLinkProps extends LinkProps {
   className?: string;
   onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
   target?: string;
-  download?: any;
+  download?: string | boolean;
   rel?: string;
   'aria-label'?: string;
   title?: string;
@@ -41,12 +41,26 @@ export const TransitionLink: React.FC<TransitionLinkProps> = ({
     const isDownload = Boolean(download);
 
     const hrefString = typeof href === 'string' ? href : href.pathname || '';
-    const isAnchorOnly = hrefString.startsWith('#');
     const isExternal = hrefString.startsWith('http://') || hrefString.startsWith('https://') || hrefString.startsWith('mailto:');
+    const isAnchor = hrefString.startsWith('#') || hrefString.startsWith('/#') || (hrefString.includes('#') && (typeof window !== 'undefined' && hrefString.startsWith(window.location.pathname)));
 
-    if (isModified || isMiddleClick || isSpecialTarget || isDownload || isAnchorOnly || isExternal) {
+    if (isModified || isMiddleClick || isSpecialTarget || isDownload || isExternal) {
       // Allow native browser behavior
       return;
+    }
+
+    // Smooth scroll for in-page anchors
+    if (isAnchor && typeof window !== 'undefined') {
+      const hash = hrefString.includes('#') ? hrefString.substring(hrefString.indexOf('#') + 1) : '';
+      if (hash) {
+        const targetElement = document.getElementById(hash);
+        if (targetElement) {
+          e.preventDefault();
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          window.history.pushState(null, '', '#' + hash);
+          return;
+        }
+      }
     }
 
     // Intercept standard internal client-side navigation

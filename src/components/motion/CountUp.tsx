@@ -22,15 +22,12 @@ export const CountUp: React.FC<CountUpProps> = ({
   className = '',
 }) => {
   const { reducedMotion } = useReducedMotion();
-  const [count, setCount] = useState<number>(reducedMotion ? end : start);
+  const [count, setCount] = useState<number>(start);
   const elementRef = useRef<HTMLSpanElement>(null);
   const hasAnimated = useRef(false);
 
   useEffect(() => {
-    if (reducedMotion) {
-      setCount(end);
-      return;
-    }
+    if (reducedMotion) return;
 
     const element = elementRef.current;
     if (!element) return;
@@ -68,6 +65,14 @@ export const CountUp: React.FC<CountUpProps> = ({
       observer.disconnect();
     };
   }, [end, start, duration, reducedMotion]);
+
+  if (reducedMotion) {
+    return (
+      <span className={className}>
+        {prefix}{end}{suffix}
+      </span>
+    );
+  }
 
   return (
     <span ref={elementRef} className={className}>

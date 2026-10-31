@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
+import { TransitionLink } from '@/components/motion/TransitionLink';
 import { KakshaLogo } from '@/components/ui/KakshaLogo';
 import { LanguageToggle } from '@/components/ui/LanguageToggle';
 import { useApp } from '@/context/AppContext';
@@ -21,18 +21,18 @@ export const Footer: React.FC = () => {
 
         {/* Center: Links */}
         <nav className="flex flex-wrap items-center justify-center gap-6 text-sm font-medium text-ink-muted" aria-label="Footer navigation">
-          <Link href="/#how-it-works" className="hover:text-ink transition-colors">
+          <TransitionLink href="/#how-it-works" className="hover:text-ink transition-colors">
             {t('nav_how_it_works')}
-          </Link>
-          <Link href="/#levels" className="hover:text-ink transition-colors">
+          </TransitionLink>
+          <TransitionLink href="/#levels" className="hover:text-ink transition-colors">
             {t('nav_levels')}
-          </Link>
-          <Link href="/#explore" className="hover:text-ink transition-colors">
+          </TransitionLink>
+          <TransitionLink href="/#explore" className="hover:text-ink transition-colors">
             {t('nav_explore')}
-          </Link>
-          <Link href="/#about" className="hover:text-ink transition-colors">
+          </TransitionLink>
+          <TransitionLink href="/#about" className="hover:text-ink transition-colors">
             {t('nav_about')}
-          </Link>
+          </TransitionLink>
           <span className="inline-flex items-center gap-1.5 text-ink-muted/80 cursor-default">
             {t('nav_contact')}
             <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-full bg-surface-muted text-ink-faint border border-line">

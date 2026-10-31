@@ -110,6 +110,11 @@ Space Kaksha/
 ---
 
 ### Change Log
+- **2026-10-31 (Interactive Scroll, Button Visibility & Celestial Hover Fixes):**
+  - Resolved transparent/invisible "Start test" button by locking explicit `#171715` ink background and `#F7F4ED` crisp text with hard shadows.
+  - Implemented smooth in-page scrolling (`scrollIntoView({ behavior: 'smooth' })`) across all navbar and footer anchors (How it works, Levels, Explore, About).
+  - Fixed pointer-events lock on route transitions: set overlay to `pointer-events-none` with 350ms watchdog auto-reset, ensuring links and buttons retain hand cursor and remain clickable on every click.
+  - Added "Woah, something is there" interactive hover effect to astronaut hero photo: radiant amber celestial glow, popping star sparkles, subtle tilt elevation, and lively rotating hand card.
 - **2026-10-31 (Item 5: Motion System & Orbit Wipe Route Transitions):**
   - Built Reveal, Stagger, CountUp, DrawPath, and StarBurst components; wired headline reveals, card staggers, and path drawing on Home; question 120px slide, snappy pop, and 1s orbital loader on Test; badge stamp-down, count-up stats, and starburst confetti on Result.
 - **2026-10-31 (Item 4: Component Language v2 & Editorial System):**

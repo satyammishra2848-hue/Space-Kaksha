@@ -2,7 +2,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useReducedMotion } from './MotionContext';
 
 interface TransitionContextType {
@@ -21,7 +21,6 @@ const TransitionContext = createContext<TransitionContextType>({
 
 export const TransitionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const router = useRouter();
-  const pathname = usePathname();
   const { reducedMotion } = useReducedMotion();
 
   const [phase, setPhase] = useState<'idle' | 'in' | 'out'>('idle');
@@ -33,6 +32,15 @@ export const TransitionProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
+  }, []);
+
+  const focusMainHeading = useCallback(() => {
+    const heading = document.querySelector('main h1, h1') as HTMLElement | null;
+    if (heading) {
+      heading.tabIndex = -1;
+      heading.focus({ preventScroll: true });
+      setScreenReaderAnnouncement(`Navigated to ${document.title || 'Space Kaksha'}`);
+    }
   }, []);
 
   const notifyPageMounted = useCallback(() => {
@@ -51,22 +59,10 @@ export const TransitionProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       setPhase('idle');
       focusMainHeading();
     }, 300);
-  }, [reducedMotion]);
-
-  const focusMainHeading = () => {
-    const heading = document.querySelector('main h1, h1') as HTMLElement | null;
-    if (heading) {
-      heading.tabIndex = -1;
-      heading.focus({ preventScroll: true });
-      setScreenReaderAnnouncement(`Navigated to ${document.title || 'Space Kaksha'}`);
-    }
-  };
+  }, [reducedMotion, focusMainHeading]);
 
   const navigateWithWipe = useCallback(
     async (href: string) => {
-      // Don't transition if already moving or same route without query change
-      if (phase !== 'idle') return;
-
       // Clean pending timeouts
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
@@ -85,6 +81,8 @@ export const TransitionProvider: React.FC<{ children: React.ReactNode }> = ({ ch
           } catch {
             window.location.href = href;
           }
+          // Watchdog: auto reset phase
+          setTimeout(() => setPhase('idle'), 150);
         }, 150);
         return;
       }
@@ -92,16 +90,18 @@ export const TransitionProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       // Full Orbit Wipe: 300ms sweep in
       setPhase('in');
 
-      // Safety timeout: Never block navigation even if animation stalls
+      // Navigate after sweep in
       timeoutRef.current = setTimeout(() => {
         try {
           router.push(href);
         } catch {
           window.location.href = href;
         }
+        // Watchdog: auto reset phase to idle after transition finishes (max 350ms)
+        setTimeout(() => setPhase('idle'), 350);
       }, 300);
     },
-    [phase, reducedMotion, router]
+    [reducedMotion, router]
   );
 
   return (
@@ -157,7 +157,7 @@ function OrbitWipeOverlay({
     return (
       <div
         aria-hidden="true"
-        className={`fixed inset-0 z-50 pointer-events-auto bg-night transition-opacity duration-150 ease-out ${
+        className={`fixed inset-0 z-50 pointer-events-none bg-night transition-opacity duration-150 ease-out ${
           phase === 'in' ? 'opacity-90' : 'opacity-0'
         }`}
       />
@@ -170,7 +170,7 @@ function OrbitWipeOverlay({
   return (
     <div
       aria-hidden="true"
-      className="fixed inset-0 z-50 pointer-events-auto overflow-hidden"
+      className="fixed inset-0 z-50 pointer-events-none overflow-hidden"
     >
       <div
         className={`w-full h-full bg-night relative transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${

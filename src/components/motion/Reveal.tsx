@@ -26,10 +26,7 @@ export const Reveal: React.FC<RevealProps> = ({
   const elementRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (reducedMotion) {
-      setIsVisible(true);
-      return;
-    }
+    if (reducedMotion) return;
 
     const element = elementRef.current;
     if (!element) return;

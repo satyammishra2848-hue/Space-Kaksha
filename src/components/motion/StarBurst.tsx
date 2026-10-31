@@ -16,15 +16,13 @@ export const StarBurst: React.FC<StarBurstProps> = ({
   className = '',
 }) => {
   const { reducedMotion } = useReducedMotion();
-  const [animating, setAnimating] = useState(active);
+  const [animating, setAnimating] = useState(() => active && !reducedMotion);
 
   useEffect(() => {
     if (!active || reducedMotion) {
-      setAnimating(false);
       return;
     }
 
-    setAnimating(true);
     const timer = setTimeout(() => {
       setAnimating(false);
     }, 400); // 400ms max per spec
