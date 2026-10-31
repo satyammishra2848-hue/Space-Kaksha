@@ -61,19 +61,19 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right Hero Illustration */}
-            <div className="lg:col-span-5 relative flex justify-center lg:justify-end">
-              <div className="relative w-full max-w-md lg:max-w-none aspect-[4/3] sm:aspect-square rounded-2xl overflow-hidden border border-line bg-night shadow-card">
+            {/* Right Hero Illustration: Bleeds organically towards the right edge */}
+            <div className="lg:col-span-5 relative flex flex-col items-center lg:items-end justify-center">
+              <div className="relative w-full max-w-lg lg:max-w-none aspect-[483/402] -mr-0 lg:-mr-8 xl:-mr-12">
                 <Image
                   src="/assets/illustrations/hero_earth_astronaut.png"
                   alt="Astronaut child and robot sitting on moon observing Earth in space"
                   fill
-                  className="object-cover object-center"
+                  className="object-contain object-right"
                   priority
                 />
-                {/* Tactical annotation doodle */}
-                <div className="absolute top-4 right-4 bg-night/80 backdrop-blur-xs px-3 py-1.5 rounded-full border border-night-line text-xs font-hand text-yellow flex items-center gap-1.5">
-                  <span>✦</span>
+                {/* Live handwritten note rendered in Caveat hand font */}
+                <div className="absolute bottom-4 left-2 sm:left-4 lg:-left-4 bg-surface/95 px-3 py-1.5 rounded-md border border-line shadow-editorial text-xs sm:text-sm font-hand text-ink flex items-center gap-1.5 -rotate-2 select-none">
+                  <span className="text-yellow">✦</span>
                   <span>Same Sky. Bigger Dreams.</span>
                 </div>
               </div>

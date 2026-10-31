@@ -9,20 +9,6 @@ hp = Image.open("images/Kaksha Space Academy Homepage.png")
 
 print("Processing illustrations...")
 
-# 1. HERO PORTAL (Organic space window with Earth, Moon, Saturn, boy, and robot)
-# Box: X 458 to 941, Y 66 to 468
-hero = hp.crop((458, 66, 941, 468)).convert("RGBA")
-# Clean out baked-in "Same Sky. Bigger Dreams." handwriting (approx X: 140 to 225, Y: 195 to 290 in cropped coordinates)
-draw = ImageDraw.Draw(hero)
-draw.rectangle([140, 195, 225, 290], fill=(7, 9, 15, 255))
-# Add subtle stars in that cleared patch so it looks like authentic starfield
-stars = [(160, 210), (195, 205), (150, 260), (210, 275), (180, 240)]
-for sx, sy in stars:
-    draw.point((sx, sy), fill=(255, 255, 255, 230))
-draw.point((175, 225), fill=(243, 201, 94, 255))
-hero.save(os.path.join(OUT_DIR, "hero_earth_astronaut.png"), "PNG")
-print("Saved hero_earth_astronaut.png (clean without baked text)")
-
 # Helper: make black background transparent
 def black_to_alpha(img, threshold=20):
     img = img.convert("RGBA")
@@ -50,6 +36,23 @@ def paper_to_alpha(img, threshold=220):
             newData.append(item)
     img.putdata(newData)
     return img
+
+# 1. HERO PORTAL (Organic space window with Earth, Moon, Saturn, boy, and robot)
+# Box: X 458 to 941, Y 66 to 468
+hero = hp.crop((458, 66, 941, 468)).convert("RGBA")
+# Clean out baked-in "Same Sky. Bigger Dreams." handwriting (approx X: 140 to 225, Y: 195 to 290 in cropped coordinates)
+draw = ImageDraw.Draw(hero)
+draw.rectangle([140, 195, 225, 290], fill=(7, 9, 15, 255))
+# Add subtle stars in that cleared patch so it looks like authentic starfield
+stars = [(160, 210), (195, 205), (150, 260), (210, 275), (180, 240)]
+for sx, sy in stars:
+    draw.point((sx, sy), fill=(255, 255, 255, 230))
+draw.point((175, 225), fill=(243, 201, 94, 255))
+
+# Convert paper surrounding the organic blob to alpha transparent so it bleeds naturally
+hero = paper_to_alpha(hero, threshold=225)
+hero.save(os.path.join(OUT_DIR, "hero_earth_astronaut.png"), "PNG")
+print("Saved hero_earth_astronaut.png (organic alpha blob without baked text)")
 
 # 2. FOUR LEVEL PLANETS
 # Level 1: Explorer Planet

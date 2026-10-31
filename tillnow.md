@@ -110,6 +110,8 @@ Space Kaksha/
 ---
 
 ### Change Log
+- **2026-10-31 (Item 2: Tight Illustration Re-Crops & Organic Hero Blob):**
+  - Re-cropped all assets removing baked-in label text ("NER", "ADET", "UT", "CIALIST") and handwriting; keyed backgrounds to transparent alpha; styled hero illustration to bleed organically from right edge with live Caveat hand text "Same Sky. Bigger Dreams."
 - **2026-10-31 (Item 1: Dark-Text Contrast Scoping):**
   - Fully mapped all night sections in `src/app/page.tsx`, `test/page.tsx`, and `result/page.tsx` with `.theme-night` and explicit `--on-night`, `--on-night-soft`, and `--on-night-muted` tokens; all 21 contrast pairs verified passing WCAG AA (node scripts/contrast.mjs).
 - **2026-10-31 (Phases B to G Complete):**
