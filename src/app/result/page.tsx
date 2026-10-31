@@ -2,11 +2,14 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { TransitionLink } from '@/components/motion/TransitionLink';
 import { AppShell } from '@/components/layout/AppShell';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { SecondaryButton } from '@/components/ui/SecondaryButton';
 import { ProgressBar } from '@/components/ui/ProgressBar';
+import { CountUp } from '@/components/motion/CountUp';
+import { Stagger } from '@/components/motion/Stagger';
+import { StarBurst } from '@/components/motion/StarBurst';
 import { useApp } from '@/context/AppContext';
 import { LEVELS } from '@/content/levels';
 
@@ -29,7 +32,7 @@ export default function ResultsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-12">
         
         {/* 1. HERO CELEBRATION */}
-        <section className="bg-surface rounded-3xl border border-line p-6 sm:p-10 shadow-card relative overflow-hidden">
+        <section className="bg-surface rounded-lg border-[1.5px] border-ink p-6 sm:p-10 shadow-[4px_4px_0_var(--ink)] relative overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
             {/* Left Content */}
@@ -39,10 +42,13 @@ export default function ResultsPage() {
                 <span>TEST COMPLETE!</span>
               </div>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-ink uppercase leading-tight">
-                YOU&apos;RE A <br />
-                <span className="text-orange">LEVEL 1 EXPLORER!</span>
-              </h1>
+              {/* Level Badge Stamps Down with Overshoot */}
+              <div className="motion-safe:animate-[stampDown_420ms_cubic-bezier(0.34,1.56,0.64,1)] origin-left">
+                <h1 className="text-3xl sm:text-4xl lg:text-[clamp(2.4rem,4.5vw,3.8rem)] font-bold tracking-tight text-ink uppercase leading-[0.95] text-balance">
+                  YOU&apos;RE A <br />
+                  <span className="text-orange">LEVEL 1 EXPLORER!</span>
+                </h1>
+              </div>
 
               <p className="text-sm sm:text-base font-semibold text-ink-soft">
                 Curious mind. Bright future.
@@ -66,16 +72,17 @@ export default function ResultsPage() {
 
             {/* Right Illustration */}
             <div className="lg:col-span-5 relative flex justify-center">
-              <div className="relative w-full max-w-sm aspect-square rounded-2xl overflow-hidden border border-line bg-night">
+              <div className="relative w-full max-w-sm aspect-square drop-shadow-md">
                 <Image
                   src="/assets/illustrations/hero_earth_astronaut.png"
                   alt="Boy astronaut and robot gazing at Earth"
                   fill
-                  className="object-cover"
+                  className="object-contain"
                   priority
                 />
-                <div className="absolute top-3 right-3 bg-night/85 px-2.5 py-1 rounded-full text-[11px] font-hand text-yellow">
-                  Same Sky. Bigger Dreams.
+                <div className="absolute top-3 right-3 bg-surface/95 px-3 py-1 rounded-md border border-line shadow-editorial text-xs font-hand text-ink flex items-center gap-1.5 -rotate-2 select-none">
+                  <span className="text-yellow">✦</span>
+                  <span>Same Sky. Bigger Dreams.</span>
                 </div>
               </div>
             </div>
@@ -83,8 +90,8 @@ export default function ResultsPage() {
           </div>
         </section>
 
-        {/* 2. HOW YOU DID (TOPIC BARS) */}
-        <section className="bg-surface rounded-2xl border border-line p-6 shadow-2xs">
+        {/* 2. HOW YOU DID (TOPIC BARS WITH COUNTUP) */}
+        <section className="bg-surface rounded-lg border-[1.5px] border-ink p-6 shadow-[3px_3px_0_var(--ink)]">
           <h2 className="text-base sm:text-lg font-bold text-ink uppercase mb-6 flex items-center gap-2">
             <span>HOW YOU DID</span>
             {placementData && (
@@ -96,47 +103,51 @@ export default function ResultsPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Topic 1 */}
-            <div className="space-y-2 p-3 rounded-xl bg-paper-warm/40 border border-line/60">
-              <div className="flex items-center gap-2.5">
-                <span className="text-xl">🪐</span>
-                <div>
+            <div className="space-y-2 p-3 rounded-lg bg-paper-warm/40 border border-line">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">🪐</span>
                   <h3 className="text-xs font-bold text-ink">Planets & Solar System</h3>
                 </div>
+                <CountUp end={80} suffix="%" className="text-xs font-mono font-bold text-orange" />
               </div>
-              <ProgressBar percentage={80} color="orange" showLabel={true} labelPrefix="ACCURACY" />
+              <ProgressBar percentage={80} color="orange" showLabel={false} />
             </div>
 
             {/* Topic 2 */}
-            <div className="space-y-2 p-3 rounded-xl bg-paper-warm/40 border border-line/60">
-              <div className="flex items-center gap-2.5">
-                <span className="text-xl">🌕</span>
-                <div>
+            <div className="space-y-2 p-3 rounded-lg bg-paper-warm/40 border border-line">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">🌕</span>
                   <h3 className="text-xs font-bold text-ink">Moon & Earth</h3>
                 </div>
+                <CountUp end={60} suffix="%" className="text-xs font-mono font-bold text-lavender" />
               </div>
-              <ProgressBar percentage={60} color="lavender" showLabel={true} labelPrefix="ACCURACY" />
+              <ProgressBar percentage={60} color="lavender" showLabel={false} />
             </div>
 
             {/* Topic 3 */}
-            <div className="space-y-2 p-3 rounded-xl bg-paper-warm/40 border border-line/60">
-              <div className="flex items-center gap-2.5">
-                <span className="text-xl">⚛️</span>
-                <div>
+            <div className="space-y-2 p-3 rounded-lg bg-paper-warm/40 border border-line">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">⚛️</span>
                   <h3 className="text-xs font-bold text-ink">Space Science Basics</h3>
                 </div>
+                <CountUp end={40} suffix="%" className="text-xs font-mono font-bold text-mint" />
               </div>
-              <ProgressBar percentage={40} color="mint" showLabel={true} labelPrefix="ACCURACY" />
+              <ProgressBar percentage={40} color="mint" showLabel={false} />
             </div>
 
             {/* Topic 4 */}
-            <div className="space-y-2 p-3 rounded-xl bg-paper-warm/40 border border-line/60">
-              <div className="flex items-center gap-2.5">
-                <span className="text-xl">🛰️</span>
-                <div>
+            <div className="space-y-2 p-3 rounded-lg bg-paper-warm/40 border border-line">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">🛰️</span>
                   <h3 className="text-xs font-bold text-ink">Space & Technology</h3>
                 </div>
+                <CountUp end={50} suffix="%" className="text-xs font-mono font-bold text-dusty-blue" />
               </div>
-              <ProgressBar percentage={50} color="blue" showLabel={true} labelPrefix="ACCURACY" />
+              <ProgressBar percentage={50} color="blue" showLabel={false} />
             </div>
           </div>
         </section>
@@ -190,12 +201,12 @@ export default function ResultsPage() {
             </PrimaryButton>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Stagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Card 1 */}
-            <Link href="/lesson/earth-and-sky" className="bg-surface p-5 rounded-2xl border border-line hover:border-ink hover:shadow-card transition-all flex flex-col justify-between group">
+            <TransitionLink href="/lesson/earth-and-sky" className="bg-surface p-5 rounded-lg border-[1.5px] border-ink shadow-[3px_3px_0_var(--ink)] hover:shadow-[5px_5px_0_var(--ink)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex flex-col justify-between group">
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <span className="w-6 h-6 rounded-full bg-mint text-ink text-xs font-bold flex items-center justify-center">1</span>
+                  <span className="w-6 h-6 rounded-md border border-ink bg-mint text-ink text-xs font-bold flex items-center justify-center">1</span>
                   <span className="text-xs text-ink-muted">~8 mins</span>
                 </div>
                 <h3 className="text-sm font-bold text-ink group-hover:text-orange transition-colors">Earth & Sky</h3>
@@ -206,13 +217,13 @@ export default function ResultsPage() {
               <div className="pt-2 border-t border-line flex justify-end">
                 <span className="text-xs font-bold text-ink">Explore →</span>
               </div>
-            </Link>
+            </TransitionLink>
 
             {/* Card 2 */}
-            <Link href="/lesson/meet-the-moon" className="bg-surface p-5 rounded-2xl border border-line hover:border-ink hover:shadow-card transition-all flex flex-col justify-between group">
+            <TransitionLink href="/lesson/meet-the-moon" className="bg-surface p-5 rounded-lg border-[1.5px] border-ink shadow-[3px_3px_0_var(--ink)] hover:shadow-[5px_5px_0_var(--ink)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex flex-col justify-between group">
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <span className="w-6 h-6 rounded-full bg-orange text-ink text-xs font-bold flex items-center justify-center">2</span>
+                  <span className="w-6 h-6 rounded-md border border-ink bg-orange text-ink text-xs font-bold flex items-center justify-center">2</span>
                   <span className="text-xs text-ink-muted">~10 mins</span>
                 </div>
                 <h3 className="text-sm font-bold text-ink group-hover:text-orange transition-colors">Meet the Moon</h3>
@@ -223,13 +234,13 @@ export default function ResultsPage() {
               <div className="pt-2 border-t border-line flex justify-end">
                 <span className="text-xs font-bold text-ink">Explore →</span>
               </div>
-            </Link>
+            </TransitionLink>
 
             {/* Card 3 */}
-            <Link href="/lesson/discover-planets" className="bg-surface p-5 rounded-2xl border border-line hover:border-ink hover:shadow-card transition-all flex flex-col justify-between group">
+            <TransitionLink href="/lesson/discover-planets" className="bg-surface p-5 rounded-lg border-[1.5px] border-ink shadow-[3px_3px_0_var(--ink)] hover:shadow-[5px_5px_0_var(--ink)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex flex-col justify-between group">
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <span className="w-6 h-6 rounded-full bg-lavender text-ink text-xs font-bold flex items-center justify-center">3</span>
+                  <span className="w-6 h-6 rounded-md border border-ink bg-lavender text-ink text-xs font-bold flex items-center justify-center">3</span>
                   <span className="text-xs text-ink-muted">~12 mins</span>
                 </div>
                 <h3 className="text-sm font-bold text-ink group-hover:text-orange transition-colors">Discover Planets</h3>
@@ -240,13 +251,14 @@ export default function ResultsPage() {
               <div className="pt-2 border-t border-line flex justify-end">
                 <span className="text-xs font-bold text-ink">Explore →</span>
               </div>
-            </Link>
+            </TransitionLink>
 
-            {/* Card 4 */}
-            <Link href="/check/level-1" className="bg-surface p-5 rounded-2xl border border-line hover:border-ink hover:shadow-card transition-all flex flex-col justify-between group">
+            {/* Card 4: Capstone Checkpoint with StarBurst */}
+            <TransitionLink href="/check/level-1" className="bg-surface p-5 rounded-lg border-[1.5px] border-ink shadow-[3px_3px_0_var(--ink)] hover:shadow-[5px_5px_0_var(--ink)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex flex-col justify-between group relative overflow-visible">
+              <StarBurst active={true} count={8} />
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <span className="w-6 h-6 rounded-full bg-orange text-ink text-xs font-bold flex items-center justify-center">4</span>
+                  <span className="w-6 h-6 rounded-md border border-ink bg-orange text-ink text-xs font-bold flex items-center justify-center">4</span>
                   <span className="text-xs text-orange font-bold">Checkpoint</span>
                 </div>
                 <h3 className="text-sm font-bold text-ink group-hover:text-orange transition-colors">Level Check</h3>
@@ -257,8 +269,8 @@ export default function ResultsPage() {
               <div className="pt-2 border-t border-line flex justify-end">
                 <span className="text-xs font-bold text-ink">Take Check →</span>
               </div>
-            </Link>
-          </div>
+            </TransitionLink>
+          </Stagger>
         </section>
 
         {/* 5. A PREVIEW OF WHAT'S AHEAD */}
@@ -268,9 +280,9 @@ export default function ResultsPage() {
               <span>✦</span>
               <span>A PREVIEW OF WHAT&apos;S AHEAD</span>
             </div>
-            <Link href="/#levels" className="text-xs font-bold text-ink hover:text-orange transition-colors">
+            <TransitionLink href="/#levels" className="text-xs font-bold text-ink hover:text-orange transition-colors">
               View All Levels →
-            </Link>
+            </TransitionLink>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

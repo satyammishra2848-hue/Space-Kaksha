@@ -1,4 +1,5 @@
 import React from 'react';
+import { DrawPath } from '@/components/motion/DrawPath';
 
 interface OrbitPathProps {
   className?: string;
@@ -18,11 +19,11 @@ export const OrbitPath: React.FC<OrbitPathProps> = ({
         xmlns="http://www.w3.org/2000/svg"
         preserveAspectRatio="none"
       >
-        <path
+        <DrawPath
           d="M0 30 Q 200 10, 400 30 T 800 30"
           stroke="var(--line-strong)"
-          strokeWidth="1.5"
-          strokeDasharray="6 6"
+          strokeWidth={1.5}
+          strokeDasharrayPattern="6 6"
         />
       </svg>
     );
@@ -35,11 +36,11 @@ export const OrbitPath: React.FC<OrbitPathProps> = ({
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path
+      <DrawPath
         d="M50 150 C 250 50, 450 250, 650 120 S 950 200, 950 150"
         stroke="var(--line)"
-        strokeWidth="2"
-        strokeDasharray="8 8"
+        strokeWidth={2}
+        strokeDasharrayPattern="8 8"
       />
     </svg>
   );

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useTransitionRouter } from '@/context/TransitionContext';
 import { AppShell } from '@/components/layout/AppShell';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { WavyDivider } from '@/components/ui/WavyDivider';
@@ -12,7 +12,7 @@ import { PLACEMENT_QUESTIONS } from '@/content/questions';
 import { useApp } from '@/context/AppContext';
 
 export default function PlacementTestPage() {
-  const router = useRouter();
+  const router = useTransitionRouter();
   const { t } = useApp();
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -59,7 +59,7 @@ export default function PlacementTestPage() {
 
       setTimeout(() => {
         router.push('/result');
-      }, 400);
+      }, 1000);
     }
   };
 
@@ -90,9 +90,10 @@ export default function PlacementTestPage() {
             </p>
           </div>
 
-          {/* Interactive Question Card */}
+          {/* Interactive Question Card with Slide Animation and Editorial Styling */}
           <div
-            className="bg-surface rounded-3xl border border-line p-6 sm:p-10 shadow-card relative transition-all"
+            key={currentIndex}
+            className="bg-surface rounded-lg border-[1.5px] border-ink p-6 sm:p-10 shadow-[4px_4px_0_var(--ink)] relative transition-all motion-safe:animate-[questionSlideIn_260ms_cubic-bezier(0.22,1,0.36,1)]"
             role="region"
             aria-label="Quiz question container"
           >
@@ -115,7 +116,7 @@ export default function PlacementTestPage() {
               {currentQuestion.question}
             </h2>
 
-            {/* 4 Options Grid with Radio Semantics */}
+            {/* 4 Options Grid with Radio Semantics & Snappy Ink Border Pop */}
             <div
               className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8"
               role="radiogroup"
@@ -130,15 +131,15 @@ export default function PlacementTestPage() {
                     role="radio"
                     aria-checked={isSelected}
                     onClick={() => handleSelectOption(opt.id)}
-                    className={`flex items-center justify-between p-4 sm:p-5 rounded-2xl border text-left transition-all duration-150 cursor-pointer ${
+                    className={`flex items-center justify-between p-4 sm:p-5 rounded-lg text-left cursor-pointer transition-all duration-90 ${
                       isSelected
-                        ? 'border-orange bg-orange/10 ring-2 ring-orange/30 shadow-xs'
-                        : 'border-line bg-surface hover:border-ink hover:bg-paper-warm/40'
+                        ? 'border-2 border-ink bg-orange/15 shadow-[3px_3px_0_var(--ink)] scale-[1.01]'
+                        : 'border-[1.5px] border-line bg-surface hover:border-ink hover:shadow-[2px_2px_0_var(--ink)]'
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold uppercase shrink-0 transition-colors ${
-                        isSelected ? 'bg-orange text-surface' : 'bg-surface-muted text-ink'
+                      <span className={`w-7 h-7 rounded-md border border-ink flex items-center justify-center text-xs font-bold uppercase shrink-0 transition-colors ${
+                        isSelected ? 'bg-orange text-ink' : 'bg-surface-muted text-ink'
                       }`}>
                         {opt.id}
                       </span>
@@ -147,8 +148,8 @@ export default function PlacementTestPage() {
                       </span>
                     </div>
 
-                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${
-                      isSelected ? 'border-orange bg-orange text-surface' : 'border-line'
+                    <div className={`w-5 h-5 rounded-full border border-ink flex items-center justify-center shrink-0 ${
+                      isSelected ? 'bg-orange text-ink font-bold' : 'border-line'
                     }`}>
                       {isSelected && <span className="text-xs">✓</span>}
                     </div>
@@ -233,6 +234,29 @@ export default function PlacementTestPage() {
             </div>
           </div>
         </section>
+
+        {/* 1s Orbital Loader Modal upon Quiz Completion */}
+        {isSubmitting && (
+          <div
+            role="status"
+            aria-live="polite"
+            className="fixed inset-0 z-50 bg-paper/90 backdrop-blur-xs flex flex-col items-center justify-center space-y-4"
+          >
+            <div className="relative w-20 h-20">
+              {/* Orbital ring */}
+              <div className="absolute inset-0 rounded-full border-2 border-dashed border-ink animate-[spin_3s_linear_infinite]" />
+              {/* Orbiting satellite dot */}
+              <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-orange border border-ink shadow-xs" />
+              {/* Central planet */}
+              <div className="absolute inset-4 rounded-full bg-night flex items-center justify-center text-xs font-bold text-yellow border border-night-line">
+                ✦
+              </div>
+            </div>
+            <p className="text-sm font-bold text-ink uppercase tracking-wider animate-pulse">
+              Calculating your orbit...
+            </p>
+          </div>
+        )}
 
       </div>
     </AppShell>

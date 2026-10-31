@@ -110,6 +110,8 @@ Space Kaksha/
 ---
 
 ### Change Log
+- **2026-10-31 (Item 5: Motion System & Orbit Wipe Route Transitions):**
+  - Built Reveal, Stagger, CountUp, DrawPath, and StarBurst components; wired headline reveals, card staggers, and path drawing on Home; question 120px slide, snappy pop, and 1s orbital loader on Test; badge stamp-down, count-up stats, and starburst confetti on Result.
 - **2026-10-31 (Item 4: Component Language v2 & Editorial System):**
   - Refined buttons and cards to ink-drawn editorial styling (1.5px ink border, 8px radius, 3px hard offset shadow, flat click press); recorded rules in DESIGN.md section 30; enabled TransitionLink across all nav and buttons.
 - **2026-10-31 (Item 3: Layout Overflow Prevention, Wavy Dividers & Scaled Navbar):**

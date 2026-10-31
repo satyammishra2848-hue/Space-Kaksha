@@ -9,6 +9,8 @@ import { SpaceDoodle } from '@/components/space/SpaceDoodle';
 import { useApp } from '@/context/AppContext';
 import { LEVELS } from '@/content/levels';
 import { WavyDivider } from '@/components/ui/WavyDivider';
+import { Reveal } from '@/components/motion/Reveal';
+import { Stagger } from '@/components/motion/Stagger';
 
 export default function HomePage() {
   const { t, locale } = useApp();
@@ -28,15 +30,17 @@ export default function HomePage() {
                 <span>{locale === 'hi' ? 'सीखो ऑर्बिट से' : 'Seekho orbit se.'}</span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-ink uppercase leading-none">
-                {t('hero_title_1')}{' '}
-                <span className="relative inline-block">
-                  {t('hero_title_2')}
-                  <span className="inline-block text-orange ml-2" aria-hidden="true">✦</span>
-                </span>{' '}
-                <br />
-                {t('hero_title_3')}
-              </h1>
+              <Reveal direction="up" delay={50}>
+                <h1 className="text-4xl sm:text-5xl lg:text-[clamp(2.6rem,5vw,4.5rem)] font-bold tracking-tight text-ink uppercase leading-[0.95] text-balance">
+                  {t('hero_title_1')}{' '}
+                  <span className="relative inline-block">
+                    {t('hero_title_2')}
+                    <span className="inline-block text-orange ml-2" aria-hidden="true">✦</span>
+                  </span>{' '}
+                  <br />
+                  {t('hero_title_3')}
+                </h1>
+              </Reveal>
 
               <div className="flex items-center gap-3">
                 <p className="text-lg sm:text-xl font-medium text-ink-soft">
@@ -94,7 +98,7 @@ export default function HomePage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+          <Stagger className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
             {/* Step 1 */}
             <div className="bg-surface p-6 rounded-lg border-[1.5px] border-ink shadow-[3px_3px_0_var(--ink)] hover:shadow-[5px_5px_0_var(--ink)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex flex-col items-center text-center group">
               <div className="w-9 h-9 rounded-full border border-ink bg-mint text-ink font-bold flex items-center justify-center mb-4 text-sm shadow-[1.5px_1.5px_0_var(--ink)]">
@@ -151,7 +155,7 @@ export default function HomePage() {
                 {t('how_step_3_desc')}
               </p>
             </div>
-          </div>
+          </Stagger>
         </div>
       </section>
 
@@ -174,7 +178,9 @@ export default function HomePage() {
             {LEVELS.map((lvl) => (
               <div
                 key={lvl.id}
-                className="bg-night-soft/95 border-[1.5px] border-night-line rounded-lg p-5 flex flex-col justify-between shadow-[3px_3px_0_var(--night-line)] hover:border-orange hover:shadow-[4px_4px_0_var(--orange)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all group"
+                className={`bg-night-soft/95 border-[1.5px] border-night-line rounded-lg p-5 flex flex-col justify-between shadow-[3px_3px_0_var(--night-line)] hover:border-orange hover:shadow-[4px_4px_0_var(--orange)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all group ${
+                  lvl.number % 2 === 0 ? 'hover:rotate-1' : 'hover:-rotate-1'
+                }`}
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
