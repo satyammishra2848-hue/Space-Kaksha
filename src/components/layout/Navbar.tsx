@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -15,8 +15,8 @@ interface NavbarProps {
   className?: string;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ variant = 'auto', className = '' }) => {
-  const pathname = usePathname();
+function NavbarInner({ variant = 'auto', className = '' }: NavbarProps) {
+  const pathname = usePathname() || '/';
   const { user, t } = useApp();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -183,5 +183,17 @@ export const Navbar: React.FC<NavbarProps> = ({ variant = 'auto', className = ''
         </div>
       )}
     </header>
+  );
+}
+
+export const Navbar: React.FC<NavbarProps> = (props) => {
+  return (
+    <Suspense fallback={
+      <header className="w-full bg-paper border-b border-line h-16 flex items-center px-6">
+        <KakshaLogo />
+      </header>
+    }>
+      <NavbarInner {...props} />
+    </Suspense>
   );
 };

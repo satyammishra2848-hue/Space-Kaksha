@@ -3,13 +3,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 interface KakshaLogoProps {
-  variant?: 'light' | 'dark';
   className?: string;
   showTagline?: boolean;
 }
 
 export const KakshaLogo: React.FC<KakshaLogoProps> = ({
-  variant = 'dark',
   className = '',
   showTagline = true,
 }) => {

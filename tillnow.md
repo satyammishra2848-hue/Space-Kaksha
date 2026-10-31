@@ -6,57 +6,72 @@
 ---
 
 ### Project Summary
-Kaksha ("Seekho orbit se") is an illustrated, editorial space academy web app for curious learners.
+Kaksha ("Seekho orbit se") is an illustrated, editorial space academy web application for curious learners.
 It pairs bite-sized space stories with hands-on interactive simulations, an adaptive placement test,
 gamified orbital roadmaps, celebratory completion states, and an empathetic bilingual AI Space Tutor.
 The visual identity fuses a warm paper canvas, crisp ink typography, and hand-drawn astronomy sketches.
-The app is engineered with Next.js App Router, TypeScript, and Tailwind CSS.
+The entire hackathon demo stack is built with Next.js 16 App Router, TypeScript, and Tailwind CSS.
 
 ### Stack
-- **Framework:** Next.js 15+ (App Router)
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS + CSS Custom Properties (`src/styles/tokens.css`)
-- **Typography:** `next/font/google` (Space Grotesk, Inter, Caveat) with system fallbacks
-- **State Management:** React Context + LocalStorage persistence (minimal zero-dependency)
+- **Framework:** Next.js 16.4.3 (App Router with Turbopack)
+- **Language:** TypeScript 5
+- **Styling:** Tailwind CSS v4 + Design Tokens (`src/styles/tokens.css`)
+- **Typography:** `next/font/google` (Space Grotesk, Inter, Caveat) with fallback
+- **State & Storage:** React Context (`AppContext`) with automatic LocalStorage persistence and zero external UI libraries
+- **Assets:** Python PIL cropped authentic illustrations in `public/assets/illustrations/` + `manifest.json`
 
 ### How to Run
 ```bash
+# 1. Install dependencies
 npm install
-npm run dev
-# Open http://localhost:3000
+
+# 2. Run TypeScript check & production build
+npm run build
+
+# 3. Start production server (runs on port 3001)
+npx next start -p 3001
+# Or run dev mode:
+# npm run dev
 ```
 
 ### Folder Map
 ```text
 Space Kaksha/
-├── images/                         # Authoritative visual reference screenshots
+├── images/                         # 10 Authoritative visual reference screenshots
 ├── public/
 │   └── assets/
-│       ├── illustrations/          # Extracted visual illustrations & diagrams
-│       └── manifest.json           # Asset registry
+│       ├── illustrations/          # 19 Extracted visual illustrations & diagrams
+│       └── manifest.json           # Asset manifest registry
+├── scripts/
+│   └── crop_assets.py              # Python asset extraction script
 ├── src/
-│   ├── app/                        # Next.js App Router pages
-│   │   ├── page.tsx                # / (Home)
-│   │   ├── test/page.tsx           # /test (Placement Test)
-│   │   ├── result/page.tsx         # /result (Assessment Results)
-│   │   ├── path/page.tsx           # /path (Learning Map)
-│   │   ├── lesson/[lessonId]/      # /lesson/:id (Interactive Lesson & Simulator)
-│   │   ├── check/[levelId]/        # /check/:id (Level Capstone Assessment)
+│   ├── app/
+│   │   ├── page.tsx                # / (Home: complete scrollable page)
+│   │   ├── test/page.tsx           # /test (12-Question Placement Test)
+│   │   ├── result/page.tsx         # /result (Results Dashboard & starting level)
+│   │   ├── path/page.tsx           # /path (Interactive Orbital Roadmap)
+│   │   ├── lesson/[lessonId]/      # /lesson/:id (Interactive Moon Simulator & Quiz)
+│   │   │   ├── page.tsx            # Server Component with generateStaticParams
+│   │   │   └── LessonDetailClient.tsx
+│   │   ├── check/[levelId]/        # /check/:id (Capstone Level Check)
+│   │   │   ├── page.tsx            # Server Component with generateStaticParams
+│   │   │   └── LevelCheckClient.tsx
 │   │   ├── profile/page.tsx        # /profile (Student Profile Dashboard)
-│   │   └── tutor/page.tsx          # /tutor (AI Space Tutor)
+│   │   ├── tutor/page.tsx          # /tutor (AI Space Tutor Dashboard)
+│   │   ├── globals.css             # Tailwind base & custom utilities
+│   │   └── layout.tsx              # Root layout with fonts & AppContextProvider
 │   ├── components/
 │   │   ├── layout/                 # AppShell, Navbar, Footer
 │   │   ├── ui/                     # PrimaryButton, SecondaryButton, ProgressBar, Badges, Modals
-│   │   ├── space/                  # MoonSimulator, OrbitPath, SpaceDoodle, PlanetCanvas
-│   │   └── tutor/                  # SpaceTutorPanel, TutorMessage, QuestionChips
-│   ├── content/                    # Typed lesson content, quizzes, and Hindi/English dictionaries
-│   ├── context/                    # User progress and locale state providers
+│   │   ├── space/                  # MoonSimulator, OrbitPath, SpaceDoodle
+│   │   ├── learning/               # LessonVideo
+│   │   └── tutor/                  # SpaceTutorPanel
+│   ├── content/                    # Levels, Lessons, Placement & Check Quizzes, Locales
+│   ├── context/                    # AppContext for state, XP, streak, locale
 │   ├── data/
-│   │   └── sampleState.ts          # Sample data for UI preview (Aarav, 320 XP, 7-day streak)
-│   ├── lib/                        # Scoring engine, deterministic tutor logic, audio/helpers
+│   │   └── sampleState.ts          # Sample data for UI build only (Aarav, 320 XP, 7-day streak)
 │   ├── styles/
-│   │   ├── tokens.css              # Design tokens from DESIGN.md
-│   │   └── globals.css             # Tailwind base & utilities, reduced motion
+│   │   └── tokens.css              # Authoritative CSS tokens from DESIGN.md
 │   └── types/                      # TypeScript definitions (Lessons, UserState, Quiz)
 ├── DESIGN.md                       # Master visual & interaction specification
 ├── PRD.md                          # Product Requirements Document
@@ -68,35 +83,55 @@ Space Kaksha/
 
 ### Status Tracker
 - **Done:**
-  - Audited all 10 reference images in `images/` and matched to all routes and states.
-  - Read `DESIGN.md` master specification completely.
-  - Formulated architectural decisions and documented in `PRD.md`.
-  - Created initial `tillnow.md` with handoff block.
+  - Audited all 10 reference images in `images/` and mapped to routes and states.
+  - Formulated and documented `PRD.md` and initialized `tillnow.md`.
+  - Next.js 16 App Router + TypeScript + Tailwind CSS scaffolding.
+  - Phase B Foundation: `src/styles/tokens.css`, globals, reduced motion, AppShell, Navbar, Footer, KakshaLogo, LanguageToggle, PrimaryButton, SecondaryButton, ProgressBar, LevelBadge, XpChip, OrbitPath, SpaceDoodle.
+  - Locale system with working `EN | हिंदी` toggle for navbars, footers, buttons, and Home headings.
+  - Asset extraction: 19 cropped illustrations and `manifest.json` generated using Python PIL.
+  - Phase C Home (`/`): Complete vertical scroll from hero to footer matching reference.
+  - Phase D Main Journey:
+    - `/test`: 12 questions with real answers, radio semantics, keyboard support, segmented progress, and dynamic placement scoring.
+    - `/result`: Level 1 Explorer assignment, topic breakdown, "What this means", Path preview, and CTAs.
+    - `/path`: Interactive connected orbital trail, completed/active/locked nodes, Up Next card, and Level 2 preview.
+    - `/lesson/[lessonId]`: Interactive Moon-phase simulator (rotation, phase calculation, presets, reset), LessonVideo component, 3-question mini-quiz, and SpaceTutorPanel.
+    - `/check/[levelId]`: 8 questions with scientific diagrams, countdown timer, clickable question navigator, and Level Up trigger.
+    - `/profile`: Complete learner dashboard with Aarav's sample telemetry, streak calendar, topic bars, monthly learning stats, achievements, and activity feed.
+    - `/tutor`: Dedicated AI Space Tutor dashboard with deterministic `getTutorReply()`, quick chips, and simulated error/retry handling.
+  - Phase E States: `LessonCompleteModal` and `LevelUpModal` with focus trapping, Esc key dismissal, and reduced-motion compliance.
+  - Phase G Verification: `npm run lint` passing with 0 errors and 0 warnings; `npm run build` passing with 16/16 static pages generated; all routes verified over HTTP returning status 200 OK.
 - **In progress:**
-  - Phase B: Next.js scaffolding in temp folder, assets extraction, design tokens, core shell components, and locale setup.
+  - Demo readiness and documentation handoff.
 - **Next steps:**
-  - Run scaffold in temp folder and move to root.
-  - Crop required illustration assets from references using Python PIL.
-  - Implement tokens, base components, and English/Hindi language toggle.
-  - Build Homepage (Phase C).
-  - Build Main Journey routes `/test`, `/result`, `/path`, `/lesson/[lessonId]`, `/check/[levelId]`, `/profile`, `/tutor` (Phase D & E).
-  - Verification & polish (Phase G).
+  - Optional: Plug in real database persistence (e.g. Supabase or SQLite) when user accounts are introduced.
+  - Optional: Integrate live Gemini API streaming keys on the server for dynamic open-domain tutor conversations.
+  - Optional: Add additional orbital simulations (e.g., gravity playground, solar system scale).
 
 ---
 
 ### Change Log
+- **2026-10-31 (Phases B to G Complete):**
+  - Resolved Next.js 16 prerender boundary requirements by separating Server Components (`page.tsx`) and Client Components (`LevelCheckClient`, `LessonDetailClient`) with `generateStaticParams`.
+  - Fixed all ESLint 9 / React 19 warnings and errors; `npm run lint` passes cleanly.
+  - Ran `npm run build` generating 16 static routes.
+  - Started production server on port 3001 and verified all 8 core endpoints return HTTP 200.
+  - Extracted 19 illustration assets into `public/assets/illustrations/` with metadata in `manifest.json`.
+  - Implemented interactive Moon-phase simulator with real-time parametric orbit and phase shading.
 - **2026-10-31 (Initial Setup & Audit):**
-  - Inspected all 10 visual references and created route mappings.
-  - Drafted comprehensive `PRD.md` with system boundaries, data models, and acceptance criteria.
-  - Created initial `tillnow.md` tracking document.
+  - Audited images and created `PRD.md` and initial `tillnow.md`.
 
 ---
 
 ### Decisions Made
-1. **Level Curriculum:** Level 1 Explorer (*Our Solar System*), Level 2 Cadet (*Gravity & Rockets*), Level 3 Astronaut (*Stars & Galaxies*), Level 4 Mission Specialist (*Space Careers*).
-2. **Sample Data Separation:** Aarav's sample values (320 XP, 7-day streak, 12 lessons) are encapsulated in `src/data/sampleState.ts` with explicit "UI build only" markers.
-3. **No Dead Links:** Unrouted navigation elements (Notes, Settings, Achievements, etc.) show visible disabled "Soon" badges or smooth scroll.
+1. **Curriculum Alignment:** Levels 1-4 aligned with references: Level 1 Explorer (*Our Solar System*), Level 2 Cadet (*Gravity & Rockets*), Level 3 Astronaut (*Stars & Galaxies*), Level 4 Mission Specialist (*Space Careers*).
+2. **Sample Data Isolation:** Aarav's preview values (320 XP, 7-day streak, 12 lessons) are encapsulated strictly in `src/data/sampleState.ts` with explicit UI disclaimer comments.
+3. **No Dead Links:** Unrouted sidebar/nav elements (Notes, Settings, Achievements, etc.) show visible disabled "Soon" badges or link directly to corresponding sections.
 4. **Deterministic AI Tutor:** AI Tutor operates via zero-API-key deterministic rule engine with simulated network latencies and recoverable error states.
+5. **Port 3001 Server:** Started production server on port 3001 due to background process occupying port 3000.
 
 ### Known Issues
-- None yet (Clean slate).
+1. IDE browser tool was not declared in the tool environment; live visual browser screenshot verification was substituted by manual reference-matched styling, exact coordinate asset cropping, and HTTP route verification.
+2. Levels 3 and 4 have curriculum summaries but their detailed sub-lessons are labelled "Coming soon" as planned for the hackathon MVP scope.
+3. Video player displays high-fidelity "Video Coming Soon" placeholder card because local MP4 assets are not packaged with the repository.
+4. Hindi translations currently cover all global chrome, navbars, footers, buttons, and Home headings; lesson deep body content currently defaults to English.
+5. Port 3000 was busy on the host environment, so the app defaults to port 3001 when launched via `next start -p 3001`.

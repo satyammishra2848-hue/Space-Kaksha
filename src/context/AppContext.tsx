@@ -23,30 +23,25 @@ const STORAGE_KEY = 'kaksha_user_state_v1';
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppContextProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<UserState>(sampleUserState);
-  const [mounted, setMounted] = useState(false);
+  const [user, setUser] = useState<UserState>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) return JSON.parse(saved);
+      } catch {
+        // Fallback to sample state
+      }
+    }
+    return sampleUserState;
+  });
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        setUser(JSON.parse(saved));
-      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
     } catch {
-      // Fallback to sample state on parse error
+      // Safe fail
     }
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (mounted) {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
-      } catch {
-        // Safe fail
-      }
-    }
-  }, [user, mounted]);
+  }, [user]);
 
   const setLocale = (loc: Locale) => {
     setUser((prev) => ({ ...prev, activeLocale: loc }));
