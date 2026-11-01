@@ -1,12 +1,19 @@
 /**
- * Fallback knowledge base for Kaksha AI Space Tutor when offline or without API key.
+ * Fallback knowledge base for Kaksha AI Space Tutor when offline, rate-limited, or without API key.
  * Provides scientifically verified, kid-friendly explanations in English and Hindi.
  */
 
 export function getFallbackReply(query: string, language: 'en' | 'hi' = 'en'): string {
   const clean = (query || '').trim().toLowerCase();
 
+  // Natural greetings and conversational responses
   if (language === 'hi') {
+    if (clean === 'hi' || clean === 'hello' || clean === 'hey' || clean.startsWith('hi ') || clean.includes('नमस्ते') || clean.includes('प्रणाम')) {
+      return 'नमस्ते! 🚀 मैं कक्षा का एआई स्पेस ट्यूटर हूँ। आज आप अंतरिक्ष के बारे में क्या जानना चाहते हैं? मुझसे कुछ भी पूछें!';
+    }
+    if (clean.includes('कौन हो') || clean.includes('who are you') || clean.includes('तुम्हारा नाम')) {
+      return 'मैं कक्षा का एआई स्पेस ट्यूटर हूँ! मैं आपको सौरमंडल, चंद्रमा और रॉकेट विज्ञान को आसानी से समझाने के लिए यहाँ हूँ।';
+    }
     if (clean.includes('चमक') || clean.includes('shine') || clean.includes('light') || clean.includes('रोशनी')) {
       return 'चाँद का अपना कोई प्रकाश नहीं होता! यह एक विशाल प्राकृतिक दर्पण की तरह सूर्य के प्रकाश को परावर्तित करके पृथ्वी की ओर भेजता है।';
     }
@@ -25,7 +32,13 @@ export function getFallbackReply(query: string, language: 'en' | 'hi' = 'en'): s
     return 'यह अंतरिक्ष का बहुत ही रोचक प्रश्न है! ब्रह्मांड रहस्यों और चमत्कारों से भरा है। अपने पाठ के इंटरैक्टिव सिमुलेटर की मदद से आप इसे और गहराई से समझ सकते हैं!';
   }
 
-  // English explanations
+  // English conversational responses
+  if (clean === 'hi' || clean === 'hello' || clean === 'hey' || clean.startsWith('hi ') || clean.startsWith('hello ') || clean === 'hey there') {
+    return 'Hi there! 🚀 I\'m your Kaksha AI Space Tutor. Ready to explore the universe together? What questions do you have about the Moon, orbits, or stars?';
+  }
+  if (clean.includes('who are you') || clean.includes('what are you') || clean.includes('your name')) {
+    return 'I am your Kaksha AI Space Tutor—your personal guide to astrophysics, lunar orbits, and planetary science. Ask me anything!';
+  }
   if (clean.includes('shine') || clean.includes('light') || clean.includes('glow')) {
     return 'The Moon has no light of its own! It acts like a giant cosmic mirror, reflecting sunlight back towards our eyes on Earth.';
   }

@@ -175,17 +175,18 @@ export function LevelCheckClient() {
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
                 
                 {/* Left: Scientific Diagram */}
-                <div className="md:col-span-5 relative aspect-square rounded-2xl overflow-hidden border border-line bg-night p-2 flex items-center justify-center">
+                <div className="md:col-span-5 relative aspect-[4/3] rounded-2xl overflow-hidden border border-line bg-night p-1 flex items-center justify-center shadow-xs">
                   <Image
-                    src="/assets/illustrations/moon_phases_diagram.png"
+                    src={currentQ.diagramUrl || '/assets/illustrations/moon_phases_diagram.png'}
                     alt="Sun Earth Moon Orbit Diagram"
                     fill
-                    className="object-contain p-2"
+                    unoptimized
+                    className="object-contain rounded-xl"
                   />
                 </div>
 
                 {/* Right: Question & Options */}
-                <div className="md:col-span-7 space-y-4">
+                <div className="md:col-span-7 space-y-3.5">
                   <h2 className="text-base sm:text-lg font-bold text-ink leading-snug">
                     {currentQ.question}
                   </h2>

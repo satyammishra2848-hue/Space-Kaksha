@@ -17,18 +17,6 @@ interface Message {
   content: string;
 }
 
-const CHIPS_EN = [
-  'Why does the Moon shine?',
-  'Phases of the Moon',
-  'How far is the Moon?',
-];
-
-const CHIPS_HI = [
-  'चाँद क्यों चमकता है?',
-  'चाँद की कलाएँ',
-  'चाँद कितनी दूर है?',
-];
-
 export const SpaceTutorPanel: React.FC<SpaceTutorPanelProps> = ({
   className = '',
   contextLesson = 'Meet the Moon',
@@ -36,7 +24,15 @@ export const SpaceTutorPanel: React.FC<SpaceTutorPanelProps> = ({
   level = 'Explorer',
 }) => {
   const { locale } = useApp();
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      role: 'assistant',
+      content:
+        locale === 'hi'
+          ? 'नमस्ते! 🚀 मैं कक्षा का एआई स्पेस ट्यूटर हूँ। मुझसे अंतरिक्ष विज्ञान के बारे में कुछ भी पूछें!'
+          : "Hello! 🚀 I'm your AI Space Tutor. Ask me anything about space, orbits, or planets!",
+    },
+  ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isRevealing, setIsRevealing] = useState(false);
@@ -44,14 +40,11 @@ export const SpaceTutorPanel: React.FC<SpaceTutorPanelProps> = ({
   const [isOffline, setIsOffline] = useState(false);
   const revealTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Clean up interval on unmount
   useEffect(() => {
     return () => {
       if (revealTimerRef.current) clearInterval(revealTimerRef.current);
     };
   }, []);
-
-  const chips = locale === 'hi' ? CHIPS_HI : CHIPS_EN;
 
   const handleAsk = async (questionText: string) => {
     const text = questionText.trim();
@@ -103,15 +96,16 @@ export const SpaceTutorPanel: React.FC<SpaceTutorPanelProps> = ({
     } catch {
       setIsLoading(false);
       setIsOffline(true);
-      const fallback = locale === 'hi'
-        ? 'संकेत खो गया है! सिमुलेटर का प्रयोग करके देखें।'
-        : 'Signal interrupted! Explore the orbital simulator to discover the answer.';
+      const fallback =
+        locale === 'hi'
+          ? 'नमस्ते! सिग्नल में थोड़ी रुकावट आई है, लेकिन मैं यहाँ हूँ। आप क्या पूछना चाहते हैं?'
+          : "Signal momentarily interrupted! I'm here though—what space question is on your mind?";
       setDisplayedAnswer(fallback);
       setMessages((prev) => [...prev, { role: 'assistant', content: fallback }]);
     }
   };
 
-  const hasAsked = messages.length > 0;
+  const hasAsked = messages.length > 1;
   const lastUserQuestion = hasAsked
     ? [...messages].reverse().find((m) => m.role === 'user')?.content
     : null;
@@ -152,11 +146,11 @@ export const SpaceTutorPanel: React.FC<SpaceTutorPanelProps> = ({
         {!hasAsked && !isLoading ? (
           <div className="bg-paper-warm/60 p-3 rounded-lg border border-line text-xs text-ink leading-relaxed mb-3">
             <span className="font-bold">
-              {locale === 'hi' ? 'नमस्ते अंतरिक्ष खोजी! 🌙' : 'Welcome explorer! 🌙'}
+              {locale === 'hi' ? 'नमस्ते अंतरिक्ष खोजी! 🌙' : 'Welcome explorer! 🚀'}
             </span>{' '}
             {locale === 'hi'
               ? 'मुझसे चंद्रमा, ग्रहों या अंतरिक्ष विज्ञान के बारे में कोई भी प्रश्न पूछें!'
-              : 'Ask me anything about lunar orbits, craters, or space science!'}
+              : 'Ask me anything about space, orbits, or physics—chat naturally like ChatGPT!'}
           </div>
         ) : (
           <div className="space-y-2 mb-3">
@@ -202,30 +196,7 @@ export const SpaceTutorPanel: React.FC<SpaceTutorPanelProps> = ({
           </div>
         )}
 
-        {/* Suggested Question Chips */}
-        <div className="space-y-1.5 mb-3">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-ink-muted">
-            {locale === 'hi' ? 'त्वरित प्रश्न:' : 'Suggested questions:'}
-          </p>
-          <div className="flex flex-col gap-1.5">
-            {chips.map((chip) => (
-              <button
-                key={chip}
-                type="button"
-                disabled={isLoading || isRevealing}
-                onClick={() => handleAsk(chip)}
-                className="w-full text-left px-3 py-1.5 rounded-lg border border-line bg-surface hover:border-ink hover:bg-paper-warm/50 text-ink text-xs font-medium transition-all flex items-center justify-between group cursor-pointer disabled:opacity-50"
-              >
-                <span className="truncate pr-2">{chip}</span>
-                <span className="text-ink-muted group-hover:text-ink group-hover:translate-x-0.5 transition-transform text-[10px]">
-                  ➔
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Visible Text Input & Send Button */}
+        {/* Open ChatGPT-style Input & Send Button (No canned chips) */}
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -238,14 +209,14 @@ export const SpaceTutorPanel: React.FC<SpaceTutorPanelProps> = ({
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             disabled={isLoading || isRevealing}
-            placeholder={locale === 'hi' ? 'अपना प्रश्न लिखें...' : 'Ask space tutor...'}
+            placeholder={locale === 'hi' ? 'कुछ भी पूछें... (उदा: नमस्ते)' : 'Ask anything... (e.g. "hi")'}
             className="flex-1 px-2.5 py-1.5 text-xs text-ink bg-transparent outline-none disabled:opacity-50"
             aria-label="Ask space tutor question"
           />
           <button
             type="submit"
             disabled={!inputValue.trim() || isLoading || isRevealing}
-            className="px-3 py-1.5 rounded-md bg-ink text-surface text-xs font-bold hover:bg-ink-soft disabled:opacity-40 transition-colors flex items-center justify-center shrink-0"
+            className="px-3 py-1.5 rounded-md bg-ink text-surface text-xs font-bold hover:bg-ink-soft disabled:opacity-40 transition-colors flex items-center justify-center shrink-0 cursor-pointer"
             aria-label="Send question"
           >
             <span>Send</span>
@@ -259,7 +230,7 @@ export const SpaceTutorPanel: React.FC<SpaceTutorPanelProps> = ({
           href="/tutor"
           className="text-[11px] font-bold text-ink hover:text-orange transition-colors inline-flex items-center gap-1"
         >
-          <span>{locale === 'hi' ? 'पूरा ट्यूटर खोलें' : 'Ask anything in full tutor'}</span>
+          <span>{locale === 'hi' ? 'पूरा ट्यूटर खोलें' : 'Open dedicated tutor dashboard'}</span>
           <span>→</span>
         </TransitionLink>
       </div>

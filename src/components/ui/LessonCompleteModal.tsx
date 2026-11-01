@@ -90,15 +90,17 @@ export const LessonCompleteModal: React.FC<LessonCompleteModalProps> = ({
               You&apos;ve completed <strong className="text-ink">{lessonTitle}</strong> and earned new rewards.
             </p>
 
-            <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-line bg-night shadow-sm">
+            <div className="relative w-full aspect-[4/3] max-h-[320px] rounded-2xl overflow-hidden border border-line bg-[#0E1320] shadow-sm">
               <Image
                 src="/assets/illustrations/mascot_celebrating_complete.png"
                 alt="Cheering astronaut and robot celebrating"
                 fill
-                className="object-contain p-2"
+                unoptimized
+                className="object-contain"
+                priority
               />
-              <div className="absolute bottom-3 left-3 bg-night/80 backdrop-blur-xs px-2.5 py-1 rounded-full text-[10px] font-hand text-yellow">
-                Small Steps Bigger Discoveries.
+              <div className="absolute bottom-3 left-3 bg-[#171715]/90 border border-[#444] px-3 py-1 rounded-full text-xs font-hand text-yellow font-bold shadow-md">
+                Small Steps. Bigger Discoveries.
               </div>
             </div>
           </div>

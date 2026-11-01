@@ -86,9 +86,28 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // 5. Check API Key
-    const apiKey = process.env.GEMINI_API_KEY;
+    // 5. Check API Key (with fallback to .env.local if runtime dev server booted earlier)
+    let apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey || apiKey === 'your_key_here') {
+      try {
+        const fs = await import('fs');
+        const path = await import('path');
+        const envPath = path.resolve(process.cwd(), '.env.local');
+        if (fs.existsSync(envPath)) {
+          const raw = fs.readFileSync(envPath, 'utf8');
+          const m = raw.match(/GEMINI_API_KEY=([^\r\n]+)/);
+          if (m && m[1]) {
+            apiKey = m[1].trim();
+            process.env.GEMINI_API_KEY = apiKey;
+          }
+        }
+      } catch {
+        // Safe fail
+      }
+    }
+
+    if (!apiKey || apiKey === 'your_key_here') {
+      console.log('[Tutor API Debug] apiKey missing or placeholder');
       return NextResponse.json({
         text: getFallbackReply(lastUserText, safeLanguage),
         offline: true,
@@ -165,6 +184,7 @@ Lesson Context: ${lessonContext}`;
     clearTimeout(timeout);
 
     if (!geminiRes.ok) {
+      console.log('[Tutor API Debug] Gemini returned status:', geminiRes.status);
       return NextResponse.json({
         text: getFallbackReply(lastUserText, safeLanguage),
         offline: true,
@@ -185,8 +205,8 @@ Lesson Context: ${lessonContext}`;
       text: replyText,
       offline: false,
     });
-  } catch {
-    // Graceful fallback: never throw or output stack traces or API keys
+  } catch (err) {
+    console.log('[Tutor API Debug] Exception:', err instanceof Error ? err.message : String(err));
     return NextResponse.json({
       text: getFallbackReply(lastUserText, safeLanguage),
       offline: true,

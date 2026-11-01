@@ -358,7 +358,7 @@ export default function HomePage() {
               <div className="flex flex-col items-center">
                 <div className="relative w-16 h-16 rounded-full border-2 border-orange p-1 bg-surface-muted/40 mb-2">
                   <Image
-                    src="/assets/illustrations/moon_mission_surface.png"
+                    src="/assets/illustrations/moon_exact_clean.png"
                     alt="Meet the Moon"
                     fill
                     className="object-contain"
